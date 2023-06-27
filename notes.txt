@@ -1,0 +1,12 @@
+Things to Research
+    1. Python Closures
+    2. Elvis Operator (https://medium.com/better-programming/did-you-know-theres-an-elvis-operator-1406cb364929)
+    3. Walrus Operator (https://medium.com/better-programming/what-is-the-walrus-operator-in-python-5846eaeb9d95)
+    4. Regular Expressions
+
+TODO/Improvement Improvement
+    1. Add docstring to every function
+    2. Get multiple players
+    3. Be able to search for other custom fields  (i.e., frequency > 0.7)
+    4. STORE TO DATABASE
+    5. Add print function/debug log

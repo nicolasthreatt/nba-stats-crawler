@@ -1,0 +1,92 @@
+Certainly! Here's an example of how you can split the code into multiple files based on the suggested structure:
+
+**main.py**:
+```python
+import argparse
+from player_stats import scrape_player
+from team_stats import collectTeamStats
+
+def main():
+    parser = argparse.ArgumentParser(description='Collect various stats from stats.nba.com/')
+    # Add command-line arguments here
+    args = parser.parse_args()
+
+    if args.players:
+        scrape_player(args)
+    elif args.teams:
+        collectTeamStats(args)
+
+if __name__ == '__main__':
+    main()
+```
+
+**player_stats.py**:
+```python
+import threading
+from Player import Player
+from BoxScores import Boxscores
+from BoxOuts import BoxOuts
+# Import other necessary modules
+
+def scrape_player(args):
+    # Implement the logic for collecting player stats based on args
+    pass
+
+def browseToPlayerStats(player):
+    # Implement browsing to player stats logic
+    pass
+
+def dbCmd(player, insert, update):
+    # Implement database command logic
+    pass
+```
+
+**team_stats.py**:
+```python
+import threading
+from Team import Team
+from BoxScores import Boxscores
+from BoxOuts import BoxOuts
+# Import other necessary modules
+
+def collectTeamStats(args):
+    # Implement the logic for collecting team stats based on args
+    pass
+
+def browseToTeamStats(team):
+    # Implement browsing to team stats logic
+    pass
+
+def dbCmd(teams, insert, update):
+    # Implement database command logic
+    pass
+```
+
+**database_storage.py**:
+```python
+from DatabaseStorage import playerDB, teamDB
+
+def dbStorage(data, insert=None, update=None):
+    # Implement the database storage logic
+    pass
+```
+
+These files should contain the relevant functions for collecting specific statistics and interacting with the database.
+Each file will import the necessary modules and implement the specific functionality.
+    **boxscores.py**, 
+    **boxouts.py**, 
+    **clutch.py**, 
+    **defense_dashboard.py**, 
+    **general.py**, 
+    **hustle.py**, 
+    **opponent_shooting.py**, 
+    **playtype.py**, 
+    **rosters.py**, 
+    **shooting.py**, 
+    **shot_dashboard.py**, 
+    **tracking.py**,
+    **database.py**, 
+
+Note:
+    The code snippets above serve as a guideline to help you split the code into separate files.
+    You'll need to fill in the actual logic within each function according to your requirements.

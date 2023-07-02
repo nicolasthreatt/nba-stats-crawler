@@ -1,6 +1,6 @@
 import argparse
 from utils.player_stats import scrape_player
-from utils.team_stats import collectTeamStats
+from utils.team_stats import scrape_teams
 
 def main():
     parser = argparse.ArgumentParser(description='Collect various stats from stats.nba.com/')
@@ -15,7 +15,7 @@ def main():
     elif args.players: # Collect all players (args.players)
         collect_all_players(args.storage)
     elif args.teams:
-        collectTeamStats(args)
+        scrape_teams(args)
     else:
         exit('No player(s) specified')
 

@@ -103,7 +103,7 @@ def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Seas
 
 
 # Store Stats to Teams
-def collectTeamStats(teams, season_year = '2020-21', season_type = 'Regular%20Season'):
+def scrape_teams(teams, season_year = '2020-21', season_type = 'Regular%20Season'):
     '''
     Produces each player's shot dashboard stats from:
         - https://www.nba.com/stats/teams/shots-general/

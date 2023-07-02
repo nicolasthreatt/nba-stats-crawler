@@ -7,25 +7,27 @@ TODO:
 
 import itertools
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-
 from utils import browserutils
+from utils.Player import Player
+from utils.Team import Team
 from utils.filters import *
 from utils.headers import getStatColumnType
 from utils.Types import TableType
-
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class BoxScores:
+    """Box Score Class"""
     def __init__(self):
         self.game = list()
 
-    # Get Box Boxscore for every game
-    def updateGameBoxScore(self):
+    def add_game(self):
+        """Add Game to Box Score"""
         self.game.append(BoxScoreStats())
 
 
 class BoxScoreStats:
+    """Box Score Stats Class"""
     def __init__(self):
         self.opponent  = str()   # Opponent
         self.game_date = str()   # Game Date
@@ -52,12 +54,11 @@ class BoxScoreStats:
         self.plusminus = int()   # Plus Minus
 
 
-# Store Stats to Player
-def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Season'):
-    '''
+def scrape_player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+    """
     Produces each player's box scores stats from:
         - https://www.nba.com/stats/players/boxscores/
-    '''
+    """
 
     # Add stat class to player
     player.addTable('boxscoreStats', BoxScores())
@@ -76,17 +77,22 @@ def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Seas
 
     # Scrape stats if table exist
     table = browserutils.loadStatTable(browser)
-    getBoxscoreStats(table, stat_type.title(), player=player)
+    parse(table, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()
 
 
-def collectTeamStats(teams, season_year = '2020-21', season_type = 'Regular%20Season'):
-    '''
+def scrape_teams(teams: , season_year = '2020-21', season_type = 'Regular%20Season'):
+    """
     Produces each team's box scores stats from:
         - https://www.nba.com/stats/teams/boxscores/
-    '''
+
+    Args:
+        teams (dict): The dictionary of teams
+        season_year (str): The season year
+        season_type (str): The season type
+    """
 
     # URL Configurations
     table_type = 'teams/'
@@ -106,17 +112,25 @@ def collectTeamStats(teams, season_year = '2020-21', season_type = 'Regular%20Se
         # Scrape stats if table exist
         table = browserutils.loadStatTable(browser)
         if table is not None:
-            getBoxscoreStats(table, stat_type.title(), team=teams[team])
+            parse(table, stat_type.title(), team=teams[team])
 
     # Close browser
     browser.quit()
 
 
-# Collect Boxscore Stats
-def getBoxscoreStats(table, stat_type, player=None, team=None):
+def parse(table: str, stat_type: str, player = None, team = None):
+    """
+    Parses the boxscore stats table and stores the data in the player/team object
+
+    Args:
+        table (str): The table containing the boxscore stats
+        stat_type (str): The type of stat being parsed
+        player (Player): The player object to store the stats
+        team (Team): The team object to store the stats
+    """
 
     table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
-    (table_header_row, table_column_offset) = getStatColumnType(stat_type, table_type)
+    table_header_row, table_column_offset = getStatColumnType(stat_type, table_type)
 
     index = 1
     game_number = 1
@@ -132,7 +146,7 @@ def getBoxscoreStats(table, stat_type, player=None, team=None):
 
                 name = info.title()
                 player.name = name
-                player.boxscoreStats.updateGameBoxScore()
+                player.boxscoreStats.add_game()
                 StatClass = player.boxscoreStats
 
             # Extract stats
@@ -143,7 +157,7 @@ def getBoxscoreStats(table, stat_type, player=None, team=None):
                     if len(team.boxscoreStats.game) == 0:
                         game_number = 1
 
-                    team.boxscoreStats.updateGameBoxScore()
+                    team.boxscoreStats.add_game()
                     StatClass = team.boxscoreStats
 
                 # Split info from table into a list

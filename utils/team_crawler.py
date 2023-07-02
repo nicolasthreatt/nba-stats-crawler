@@ -1,10 +1,9 @@
 import threading
+from box_outs import box_outs
+from box_scores import box_scores
 from Team import Team
-from BoxScores import Boxscores
-from BoxOuts import BoxOuts
-# Import other necessary modules
 
-def collectTeamStats(args):
+def scrape_teams(args):
     # Implement the logic for collecting team stats based on args
     pass
 

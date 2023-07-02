@@ -4,11 +4,11 @@ BOX OUTS
 
 import itertools
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-
 from utils import browserutils
 from utils.headers import getStatColumnType
+from utils.Player import Player
 from utils.Types import TableType
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 boxout_stats = [
@@ -20,8 +20,8 @@ boxout_stats = [
     'PCT_BOX_OUTS_DEF',
 ]
 
-# Box-Out Stats
 class BoxOuts:
+    """Box Out Class"""
     def __init__(self, table_type):
         self.boxouts                         = float() # Box Outs
         self.off_boxouts                     = float() # Offensive Box Outs
@@ -36,11 +36,11 @@ class BoxOuts:
             self.pct_player_reb_when_boxout  = float() # Percentage of Player Rebounds when Box Out
 
 
-def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Season'):
-    '''
+def scrape_player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+    """
     Produces each player's box out stats from:
         - https://www.nba.com/stats/players/box-outs/
-    '''
+    """
 
     # Add stat class to player
     player.addTable('boxOutStats', BoxOuts(TableType.PLAYER.name))
@@ -58,17 +58,22 @@ def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Seas
 
     # Scrape stats if table exist
     table = browserutils.loadStatTable(browser)
-    getBoxOutStats(table, stat_type.title(), player=player)
+    parse(table, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()
 
 
-def collectTeamStats(teams, season_year = '2020-21', season_type = 'Regular%20Season'):
-    '''
+def scrape_teams(teams: str, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+    """
     Produces each teams's box out stats from:
         - https://www.stats.nba.com/teams/box-outs/
-    '''
+    
+    Args:
+        teams (dict): teams dictionary
+        season_year (str): season year
+        season_type (str): season type
+    """
 
         # Add stat class to teams
     for team in teams:
@@ -89,17 +94,26 @@ def collectTeamStats(teams, season_year = '2020-21', season_type = 'Regular%20Se
     # Scrape stats if table exist
     table = browserutils.loadStatTable(browser)
     if table is not None:
-        getBoxOutStats(table, stat_type.title(), teams=teams)
+        parse(table, stat_type.title(), teams=teams)
 
     # Close browser
     browser.quit()
 
 
 # Collect Box Out Stats
-def getBoxOutStats(table, stat_key, player=None, teams=None):
+def parse(table: str, stat_key: str, player = None, teams = None):
+    """
+    Parses box out stats from nba stats table and adds them to player/team object
+
+    Args:
+        table (str): table from https://www.nba.com/stats/players/box-outs/
+        stat_key (str): key for stat
+        player (Player): player object
+        teams (dict): teams dictionary
+    """
 
     table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
-    (table_header_row, table_column_offset) = getStatColumnType(stat_key, table_type)
+    table_header_row, table_column_offset = getStatColumnType(stat_key, table_type)
 
     # Parse statistic table
     for row, info in enumerate(table.split('\n')):

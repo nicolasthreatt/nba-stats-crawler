@@ -25,7 +25,7 @@ def scrape_stats(player):
 
     threads = [
         threading.Thread(target=BoxOuts.scrape_player,          args=(player,)),
-        threading.Thread(target=Boxscores.scrape_player,        args=(player,)),
+        threading.Thread(target=box_scores.scrape_player,        args=(player,)),
         threading.Thread(target=Clutch.scrape_player,           args=(player,)),
         threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)),
         threading.Thread(target=General.scrape_player,          args=(player,)),

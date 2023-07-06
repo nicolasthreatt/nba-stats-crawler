@@ -1,15 +1,17 @@
 """
-CLUTCH
+clutch.py
 """
 
 import itertools
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-
 from utils import browserutils
 from utils.headers import getStatColumnType
+from utils.Player import Player
+from utils.Team import Team
 from utils.Types import TableType
-from .TableColumn import *
+from webdriver_manager.chrome import ChromeDriverManager
+
+from .TableColumn import * # TODO: Fix
 
 
 clutch_stats_tables = {
@@ -23,46 +25,60 @@ clutch_stats_tables = {
 }
 
 
+class Clutch(dict):
+    def __init__(self, table_type):
+        self.clutch_games          = int()   # Total Games Played
+        self.clutch_wins           = int()   # Totals Wins
+        self.clutch_losses         = int()   # Total Loses
+        self.clutch_mins           = float() # Minutes
+        self.statrank_dict         = dict()  # Dictionary to hold each team's stat rank
 
-# Initialize Clutch Stat Types
-def initClutchStatTypes(StatClass, table_type):
+        if table_type == TableType.TEAM.name:
+            self.clutch_win_pct    = float() # Win Percentage
 
-    for clutch_stat_table in clutch_stats_tables:
+        create_tables(self, table_type)
 
-        if clutch_stat_table == 'Traditional':
-            StatClass[clutch_stat_table] = ClutchTradional(table_type)
+    def __getattr__(self, key):
+        return self[key]
 
-        elif clutch_stat_table == 'Advanced':
-            StatClass[clutch_stat_table] = ClutchAdvanced(table_type)
+    def create_tables(StatClass: Clutch, table_type: TableType):
+        """Create a dictionary of for each clutch stat table.
+        This can be done for the `Clutch` class is represented as a dictionary.
 
-        elif clutch_stat_table == 'Misc':
-            StatClass[clutch_stat_table] = ClutchMisc(table_type)
+        Args:
+            StatClass (Clutch): Clutch class
+            table_type (str): Table type (player/team)
+        """
+        for clutch_stat_table in clutch_stats_tables:
+            if clutch_stat_table == 'Traditional':
+                StatClass[clutch_stat_table] = ClutchTradional(table_type)
+            elif clutch_stat_table == 'Advanced':
+                StatClass[clutch_stat_table] = ClutchAdvanced(table_type)
+            elif clutch_stat_table == 'Misc':
+                StatClass[clutch_stat_table] = ClutchMisc(table_type)
+            elif clutch_stat_table == 'Scoring':
+                StatClass[clutch_stat_table] = ClutchScoring(table_type)
+            elif clutch_stat_table == 'Usage':
+                if(table_type == TableType.PLAYER.name):
+                    StatClass[clutch_stat_table] = ClutchUsage(table_type)
+            elif clutch_stat_table == 'Four Factors':
+                if(table_type == TableType.TEAM.name):
+                    StatClass[clutch_stat_table] = ClutchFourFactors(table_type)
+            elif clutch_stat_table == 'Opponent':
+                if(table_type == TableType.TEAM.name):
+                    StatClass[clutch_stat_table] = ClutchOpponent(table_type)
+            else:
+                raise ValueError('Clutch Stat Type: ' + clutch_stat_table + ' not found.')
 
-        elif clutch_stat_table == 'Scoring':
-            StatClass[clutch_stat_table] = ClutchScoring(table_type)
 
-        elif clutch_stat_table == 'Usage':
-            if(table_type == TableType.PLAYER.name):
-                StatClass[clutch_stat_table] = ClutchUsage(table_type)
-
-        elif clutch_stat_table == 'Four Factors':
-            if(table_type == TableType.TEAM.name):
-                StatClass[clutch_stat_table] = ClutchFourFactors(table_type)
-
-        elif clutch_stat_table == 'Opponent':
-            if(table_type == TableType.TEAM.name):
-                StatClass[clutch_stat_table] = ClutchOpponent(table_type)
-
-
-def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Season'):
-    '''
-    Produces each player's clutch stats from:
+def scrape_player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+    """Produces each player's clutch stats from:
         - https://www.nba.com/stats/players/clutch-traditional/
         - https://www.nba.com/stats/players/clutch-advanced/
         - https://www.nba.com/stats/players/clutch-misc/
         - https://www.nba.com/stats/players/clutch-scoring/
         - https://www.nba.com/stats/players/clutch-usage/
-    '''
+    """
 
     # Add stat class to player
     player.addTable('clutch', Clutch(TableType.PLAYER.name))
@@ -88,22 +104,21 @@ def scrape_player(player, season_year = '2020-21', season_type = 'Regular%20Seas
             # Scrape stats if table exists
             table = browserutils.loadStatTable(browser)
             if table is not None:
-                getClutchStats(table, stat_key, player=player)
+                parse(table, stat_key, player=player)
 
     # Close browser
     browser.quit()
 
 
-def scrape_teams(teams, season_year = '2020-21', season_type = 'Regular%20Season'):
-    '''
-    Produces each team's clutch stats from:
+def scrape_teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+    """Produces each team's clutch stats from:
         - https://www.nba.com/stats/teams/clutch-traditional/
         - https://www.nba.com/stats/teams/clutch-advanced/
         - https://www.nba.com/stats/teams/clutch-misc/
         - https://www.nba.com/stats/teams/clutch-scoring/
         - https://www.nba.com/stats/teams/clutch-four-factors/
         - https://www.nba.com/stats/teams/clutch-usage/
-    '''
+    """
 
     # Add stat class to teams
     for team in teams:
@@ -128,17 +143,25 @@ def scrape_teams(teams, season_year = '2020-21', season_type = 'Regular%20Season
 
             table = browserutils.loadStatTable(browser)
             if table is not None:
-                getClutchStats(table, stat_key, teams=teams)
+                parse(table, stat_key, teams=teams)
 
     # Close browser
     browser.quit()
 
 
-# Collect Clutch Stats
-def getClutchStats(table, stat_key, player=None, teams=None):
+# TODO: CLEAN UP
+def parse(table: str, stat_type: str, player = None, team = None):
+    """Parses the clutch stats table and stores the data in the player/team object
+
+    Args:
+        table (str): The table containing the boxscore stats
+        stat_type (str): The type of stat being parsed
+        player (Player): The player object to store the stats
+        team (Team): The team object to store the stats
+    """
 
     table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
-    (table_header_row, table_column_offset) = getStatColumnType('Clutch ' + stat_key, table_type)
+    table_header_row, table_column_offset = getStatColumnType('Clutch ' + stat_key, table_type)
 
     # Parse statistic table
     index = 1
@@ -259,7 +282,6 @@ def getClutchStats(table, stat_key, player=None, teams=None):
                     StatClass[stat_key].clutch_plusminus = float(clutch_plusminus)
 
                 elif stat_key == 'Advanced':
-
                     clutch_orating       = data[next(itr)]
                     StatClass[stat_key].clutch_orating = float(clutch_orating)
 
@@ -307,7 +329,6 @@ def getClutchStats(table, stat_key, player=None, teams=None):
                     StatClass[stat_key].clutch_pie = float(clutch_pie)
 
                 elif stat_key == 'Misc':
-
                     clutch_pts_off_tov        = data[next(itr)]
                     StatClass[stat_key].clutch_pts_off_tov = float(clutch_pts_off_tov)
 
@@ -333,20 +354,19 @@ def getClutchStats(table, stat_key, player=None, teams=None):
                     StatClass[stat_key].clutch_opp_pts_in_paint = float(clutch_opp_pts_in_paint)
 
                     if player is not None:
-                        clutch_blk                = data[next(itr)]
+                        clutch_blk            = data[next(itr)]
                         StatClass[stat_key].clutch_blk = float(clutch_blk)
 
-                        clutch_blk_a              = data[next(itr)]
+                        clutch_blk_a          = data[next(itr)]
                         StatClass[stat_key].clutch_blk_a = float(clutch_blk_a)
 
-                        clutch_fouls_c            = data[next(itr)]
+                        clutch_fouls_c        = data[next(itr)]
                         StatClass[stat_key].clutch_fouls_c = float(clutch_fouls_c)
 
-                        clutch_fouls_d            = data[next(itr)]
+                        clutch_fouls_d        = data[next(itr)]
                         StatClass[stat_key].clutch_fouls_d = float(clutch_fouls_d)
 
                 elif stat_key == 'Scoring':
-
                     clutch_pct_fga_2pt       = data[next(itr)]
                     StatClass[stat_key].clutch_pct_fga_2pt = float(clutch_pct_fga_2pt)
 
@@ -393,7 +413,6 @@ def getClutchStats(table, stat_key, player=None, teams=None):
                     StatClass[stat_key].clutch_pct_pts_fgm_uast = float(clutch_pct_pts_fgm_uast)
 
                 elif stat_key == 'Usage':
-
                     clutch_pct_usage         = data[next(itr)]
                     StatClass[stat_key].clutch_pct_usage = float(clutch_pct_usage)
 
@@ -449,7 +468,6 @@ def getClutchStats(table, stat_key, player=None, teams=None):
                     StatClass[stat_key].clutch_pct_of_team_pts = float(clutch_pct_of_team_pts)
 
                 elif stat_key == 'Four Factors':
-
                     clutch_efg_pct      = data[next(itr)]
                     StatClass[stat_key].clutch_efg_pct = float(clutch_efg_pct)
 
@@ -475,7 +493,6 @@ def getClutchStats(table, stat_key, player=None, teams=None):
                     StatClass[stat_key].clutch_opp_oreb_pct = float(clutch_opp_oreb_pct)
 
                 elif stat_key == 'Opponent':
-
                     clutch_opp_fg_m      = data[next(itr)]
                     StatClass[stat_key].clutch_opp_fg_m = float(clutch_opp_fg_m)
 
@@ -539,13 +556,14 @@ def getClutchStats(table, stat_key, player=None, teams=None):
             index += 1
 
 
-def getClutchType(table_type, stat_key):
-    return {
-        'Traditional':  clutch_traditional_player if table_type == TableType.PLAYER.name else clutch_traditional_team,
-        'Advanced':     clutch_advanced_player    if table_type == TableType.PLAYER.name else clutch_advanced_team,
-        'Misc':         clutch_misc_player        if table_type == TableType.PLAYER.name else clutch_misc_team,
-        'Scoring':      clutch_scoring_player     if table_type == TableType.PLAYER.name else clutch_scoring_team,
-        'Usage':        clutch_usage_player       if table_type == TableType.PLAYER.name else None,
-        'Opponent':     None                      if table_type == TableType.PLAYER.name else clutch_opponent_team,
-        'Four Factors': None                      if table_type == TableType.PLAYER.name else clutch_four_factors_team,
-    }.get(stat_key)
+# TODO: DELETE
+# def getClutchType(table_type, stat_key):
+#     return {
+#         'Traditional':  clutch_traditional_player if table_type == TableType.PLAYER.name else clutch_traditional_team,
+#         'Advanced':     clutch_advanced_player    if table_type == TableType.PLAYER.name else clutch_advanced_team,
+#         'Misc':         clutch_misc_player        if table_type == TableType.PLAYER.name else clutch_misc_team,
+#         'Scoring':      clutch_scoring_player     if table_type == TableType.PLAYER.name else clutch_scoring_team,
+#         'Usage':        clutch_usage_player       if table_type == TableType.PLAYER.name else None,
+#         'Opponent':     None                      if table_type == TableType.PLAYER.name else clutch_opponent_team,
+#         'Four Factors': None                      if table_type == TableType.PLAYER.name else clutch_four_factors_team,
+#     }.get(stat_key)

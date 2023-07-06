@@ -16,7 +16,7 @@ from DatabaseStorage import teamDB
 from Team import Team
 from BoxScores import Boxscores
 from BoxOuts import BoxOuts
-from Clutch import Clutch
+from clutch import Clutch
 from DefenseDashboard import DefenseDashboard
 from General import General
 from Hustle import Hustle

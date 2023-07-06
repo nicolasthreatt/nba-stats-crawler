@@ -8,10 +8,10 @@ TODO:
 import itertools
 from selenium import webdriver
 from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
 from utils.filters import *
 from utils.headers import getStatColumnType
+from utils.Player import Player
+from utils.Team import Team
 from utils.Types import TableType
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -83,7 +83,7 @@ def scrape_player(player: Player, season_year: str = '2020-21', season_type: str
     browser.quit()
 
 
-def scrape_teams(teams: , season_year = '2020-21', season_type = 'Regular%20Season'):
+def scrape_teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     """
     Produces each team's box scores stats from:
         - https://www.nba.com/stats/teams/boxscores/
@@ -119,8 +119,7 @@ def scrape_teams(teams: , season_year = '2020-21', season_type = 'Regular%20Seas
 
 
 def parse(table: str, stat_type: str, player = None, team = None):
-    """
-    Parses the boxscore stats table and stores the data in the player/team object
+    """Parses the boxscore stats table and stores the data in the player/team object
 
     Args:
         table (str): The table containing the boxscore stats

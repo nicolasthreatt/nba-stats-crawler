@@ -1,6 +1,4 @@
-'''
-TABLE COLUMNS
-'''
+# clutch/tables/columns.py
 
 clutch_stats = [
     'GP',

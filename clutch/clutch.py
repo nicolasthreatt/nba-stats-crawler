@@ -1,17 +1,21 @@
-"""
-clutch.py
-"""
+# clutch.py
 
 import itertools
 from selenium import webdriver
+from tables.columns import *
+from tables.advanced import ClutchAdvanced
+from tables.four_factors import ClutchFourFactors
+from tables.misc import ClutchMisc
+from tables.opponent import ClutchOpponent
+from tables.scoring import ClutchScoring
+from tables.traditional import ClutchTradional
+from tables.usage import ClutchUsage
 from utils import browserutils
 from utils.headers import getStatColumnType
 from utils.Player import Player
 from utils.Team import Team
-from utils.Types import TableType
+from utils.types import TableType
 from webdriver_manager.chrome import ChromeDriverManager
-
-from .TableColumn import * # TODO: Fix
 
 
 clutch_stats_tables = {
@@ -98,12 +102,12 @@ def scrape_player(player: Player, season_year: str = '2020-21', season_type: str
         if not stat_key in ('Four Factors', 'Opponent'):
 
             # Browse to correct stat category
-            url = 'https://nba.com/stats/' + table_type  + stat_url + '/?sort=' + stat + '&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type + '&PerMode=' + per_mode
+            url = f'https://nba.com/stats/{table_type}{stat_url}/?sort={stat}&CF=PLAYER_NAME*E*{name}&Season={season_year}&SeasonType={season_type}&PerMode={per_mode}'
             browser.get(url)
 
             # Scrape stats if table exists
             table = browserutils.loadStatTable(browser)
-            if table is not None:
+            if table:
                 parse(table, stat_key, player=player)
 
     # Close browser
@@ -138,11 +142,11 @@ def scrape_teams(teams: Team, season_year: str = '2020-21', season_type: str = '
         if stat_key != 'Usage':
 
             # Browse to correct stat category
-            url = 'https://www.nba.com/stats/' + table_type  + stat_url + '?sort=' + stat + '&dir=-1' + '&Season=' + season_year + '&SeasonType=' + season_type + '&PerMode=' + per_mode
+            url = f'https://nba.com/stats/{table_type}{stat_url}/?sort={stat}&dir=-1&Season={season_year}&SeasonType={season_type}&PerMode={per_mode}'
             browser.get(url)
 
             table = browserutils.loadStatTable(browser)
-            if table is not None:
+            if table:
                 parse(table, stat_key, teams=teams)
 
     # Close browser
@@ -150,7 +154,7 @@ def scrape_teams(teams: Team, season_year: str = '2020-21', season_type: str = '
 
 
 # TODO: CLEAN UP
-def parse(table: str, stat_type: str, player = None, team = None):
+def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
     """Parses the clutch stats table and stores the data in the player/team object
 
     Args:
@@ -160,6 +164,7 @@ def parse(table: str, stat_type: str, player = None, team = None):
         team (Team): The team object to store the stats
     """
 
+    # Get correct table type
     table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
     table_header_row, table_column_offset = getStatColumnType('Clutch ' + stat_key, table_type)
 
@@ -270,13 +275,15 @@ def parse(table: str, stat_type: str, player = None, team = None):
                     if player is not None:
                         clutch_fp    = data[next(itr)]
                         StatClass[stat_key].clutch_fp = float(clutch_fp)
-                    elif teams is not None:
+
+                    if teams is not None:
                         clutch_fouls_d = data[next(itr)]
                         StatClass[stat_key].clutch_fouls_d = float(clutch_fouls_d)
 
                     if player is not None:
                         clutch_plusminus = data[next(itr) + 2]  # Skip DD and TD Columns for Player
-                    elif teams is not None:
+
+                    if teams is not None:
                         clutch_plusminus = data[next(itr)]
 
                     StatClass[stat_key].clutch_plusminus = float(clutch_plusminus)
@@ -554,16 +561,3 @@ def parse(table: str, stat_type: str, player = None, team = None):
                     StatClass[stat_key].clutch_opp_plusminus = float(clutch_opp_plusminus)
 
             index += 1
-
-
-# TODO: DELETE
-# def getClutchType(table_type, stat_key):
-#     return {
-#         'Traditional':  clutch_traditional_player if table_type == TableType.PLAYER.name else clutch_traditional_team,
-#         'Advanced':     clutch_advanced_player    if table_type == TableType.PLAYER.name else clutch_advanced_team,
-#         'Misc':         clutch_misc_player        if table_type == TableType.PLAYER.name else clutch_misc_team,
-#         'Scoring':      clutch_scoring_player     if table_type == TableType.PLAYER.name else clutch_scoring_team,
-#         'Usage':        clutch_usage_player       if table_type == TableType.PLAYER.name else None,
-#         'Opponent':     None                      if table_type == TableType.PLAYER.name else clutch_opponent_team,
-#         'Four Factors': None                      if table_type == TableType.PLAYER.name else clutch_four_factors_team,
-#     }.get(stat_key)

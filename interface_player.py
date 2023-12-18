@@ -1,21 +1,20 @@
 '''
-INTERFACE (RENAME LATER)
+TODO (DELETE ONCE MAIN AND INTERFACES ARE FINISHED)
 '''
 
 import argparse
 import threading
 
-from DatabaseStorage import playerDB
-
-from Player import Player
+from db import players as db
 
 from BoxScores import Boxscores
 from BoxOuts import BoxOuts
 from clutch import Clutch
-from DefenseDashboard import DefenseDashboard
+from defense_dashboard.scraper import player as DefenseDashboard
 from General import General
 from Hustle import Hustle
 from OpponentShooting import OpponentShooting
+from Player import Player
 from Playtype import Playtypes
 from Shooting import Shooting
 from ShotDashboard import ShotDashboard
@@ -64,29 +63,29 @@ def dbCmd(player, insert, update):
     elif update:
         dbStorage(player, update=update)
 
-# TODO: MOVE TO playerDB.py
+# TODO: MOVE TO db.py
 def dbStorage(player, insert=None, update=None):
 
     if not insert and not update:
         return
 
-    cnxn = playerDB.connect()
+    cnxn = db.connect()
     print('Database connected...')
 
     if insert:
         print('Inserting Stats...')
-        playerDB.insert_bio(cnxn, player)
-        playerDB.insert_box_outs(cnxn, player)
-        playerDB.insert_boxscores(cnxn, player)
-        playerDB.insert_clutch(cnxn, player)
-        playerDB.insert_defensive_dashboard(cnxn, player)
-        playerDB.insert_general(cnxn, player)
-        playerDB.insert_hustle(cnxn, player)
-        playerDB.insert_opp_shooting(cnxn, player)
-        playerDB.insert_play_types(cnxn, player)
-        playerDB.insert_shooting(cnxn, player)
-        playerDB.insert_shot_dashboard(cnxn, player)
-        playerDB.insert_tracking(cnxn, player)
+        db.insert_bio(cnxn, player)
+        db.insert_box_outs(cnxn, player)
+        db.insert_boxscores(cnxn, player)
+        db.insert_clutch(cnxn, player)
+        db.insert_defensive_dashboard(cnxn, player)
+        db.insert_general(cnxn, player)
+        db.insert_hustle(cnxn, player)
+        db.insert_opp_shooting(cnxn, player)
+        db.insert_play_types(cnxn, player)
+        db.insert_shooting(cnxn, player)
+        db.insert_shot_dashboard(cnxn, player)
+        db.insert_tracking(cnxn, player)
     elif update:
         print('Updating Stats...')
 

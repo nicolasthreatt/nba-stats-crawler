@@ -7,12 +7,9 @@ TODO:
     - Add season
     - Add option to insert/update data into individual tables
 '''
-
 import argparse
 import threading
-
-from DatabaseStorage import teamDB
-
+from db import teams
 from Team import Team
 from BoxScores import Boxscores
 from BoxOuts import BoxOuts
@@ -62,23 +59,23 @@ def dbStorage(teams):
     args = getArgs()
 
     if args.insert: or args.update:
-        cnxn = teamDB.connect()
+        cnxn = db.connect()
         print('Database connected...')
 
         if args.insert:
-            teamDB.insert_team_info_data(cnxn, teams)
-            teamDB.insert_rosters(cnxn, teams)
-            teamDB.insert_box_outs(cnxn, teams)
-            teamDB.insert_boxscores(cnxn, teams)
-            teamDB.insert_clutch(cnxn, teams)
-            teamDB.insert_defensive_dashboard(cnxn, teams)
-            teamDB.insert_general(cnxn, teams)
-            teamDB.insert_hustle(cnxn, teams)
-            teamDB.insert_play_types(cnxn, teams)
-            teamDB.insert_shot_dashboard(cnxn, teams)
-            teamDB.insert_opp_shooting(cnxn, teams)
-            teamDB.insert_shooting(cnxn, teams)
-            teamDB.insert_tracking(cnxn, teams)
+            db.insert_team_info_data(cnxn, teams)
+            db.insert_rosters(cnxn, teams)
+            db.insert_box_outs(cnxn, teams)
+            db.insert_boxscores(cnxn, teams)
+            db.insert_clutch(cnxn, teams)
+            db.insert_defensive_dashboard(cnxn, teams)
+            db.insert_general(cnxn, teams)
+            db.insert_hustle(cnxn, teams)
+            db.insert_play_types(cnxn, teams)
+            db.insert_shot_dashboard(cnxn, teams)
+            db.insert_opp_shooting(cnxn, teams)
+            db.insert_shooting(cnxn, teams)
+            db.insert_tracking(cnxn, teams)
         else: # args.update:
             #TODO: Update existing data in database
             pass

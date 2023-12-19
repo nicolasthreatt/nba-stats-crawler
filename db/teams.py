@@ -7,8 +7,6 @@ TODO (For later when have some more free time):
     - Update database to inclise season so dont have to trunacate table each time
         can simply use a WHERE clause to update a team's seaason data
 '''
-
-
 import pyodbc
 import os
 

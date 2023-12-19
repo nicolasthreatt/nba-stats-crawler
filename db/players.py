@@ -6,7 +6,6 @@ Connect to Azure SQL Database:
 Install ODBC Driver:
     -https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver15
 '''
-
 import os
 import pyodbc
 

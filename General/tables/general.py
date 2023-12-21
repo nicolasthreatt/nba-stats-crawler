@@ -63,8 +63,8 @@ def init(GeneralClass, table_type):
 
 
 # Initialize General Ranks
-def create_ranking_columns(GeneralStatClass, table_stats):
-    for stat in table_stats:
+def create_ranking_columns(GeneralStatClass, table_columns):
+    for stat in table_columns:
         if '_NAME' not in stat:
             GeneralStatClass[stat] = int()
 

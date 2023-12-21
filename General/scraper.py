@@ -4,6 +4,7 @@ from tables.general import General
 from utils import browserutils
 from utils.Player import Player
 from utils.Team import Team
+from utils.Types import TableType
 from webdriver_manager.chrome import ChromeDriverManager
 
 

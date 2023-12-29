@@ -1,5 +1,7 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from players.tables.player import Player
+from players.parser import parse
 from utils import browserutils
 
 
@@ -15,16 +17,15 @@ def player(fname: str, lname: str, season_year: str = '2020-21', season_type: st
     stat_url    = 'bio/'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
+
 
     # Browse to correct stat category
     url = 'https://nba.com/stats/' + table_type + stat_url + '?sort=&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type
     browser.get(url)
-    browserutils.loadTeamPage(browser, locator="//*[@class='nba-stat-table__overflow']") # TODO: SEE IF STILL WORKS
 
     # Scrape stats
-    player_bio_table = browser.find_element_by_class_name("nba-stat-table__overflow")   # TODO: SEE IF STILL WORKS
-    player_bio_table = browserutils.loadPlayerInfo(player_bio_table, mode="bios")
+    player_bio_table = browserutils.loadPlayerInfo(browser, mode="bios") # TODO: MOVE TO CRAWLER.PY
     if player_bio_table is not None:
         print('Initializing player...\n')
         parse(player_bio_table, player)

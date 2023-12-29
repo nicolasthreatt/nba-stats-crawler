@@ -5,11 +5,11 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser(description='Collect various stats from stats.nba.com/')
 
-    parser.add_argument('--name', dest='name', type=str, nargs=2, metavar='', required=False, default=[str(), str()],
-                         help='Player Name')
+    parser.add_argument('--player', dest='player', type=str, nargs=2, metavar='', required=False,
+                        help='Single Specified Player')
     
     parser.add_argument('--all', dest='all', required=False, action='store_true',
-                         help='Every Player in Database')
+                        help='Every Player listed in nba.com/players')
     
     parser.add_argument('--rosters', dest='rosters', required=False, action='store_true',
                         help='Collect Each Team\'s Rosters')
@@ -19,12 +19,8 @@ def parse_arguments():
     #     INSERT = 1
     #     UPDATE = 2
 
-    # parser.add_argument('--storage', dest='storage', type=StorageType, required=False, default=StorageType.INSERT,
-    #                      help='Insert New Data into Existing Table in Database')
-    parser.add_argument('--insert', dest='insert', required=False, action='store_true',
-                         help='Insert New Data into Existing Table in Database')
-
-    parser.add_argument('--update', dest='update', required=False, action='store_true',
-                        help='Update Existing Table in Database with new Data')
+    parser.add_argument('--storage', dest='storage', type=str, required=False, default=str(),
+                        choices=['insert', 'update', ''],
+                        help='Stores New Data into Table in Azure Database')
 
     return parser.parse_args()

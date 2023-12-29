@@ -94,16 +94,16 @@ def scrape_stats(player):
 
     threads = [
         threading.Thread(target=BoxOuts.scrape_player,          args=(player,)),
-        threading.Thread(target=Boxscores.scrape_player,        args=(player,)),
-        threading.Thread(target=Clutch.scrape_player,           args=(player,)),
-        threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)),
-        threading.Thread(target=General.scrape_player,          args=(player,)),
-        threading.Thread(target=Hustle.scrape_player,           args=(player,)),
-        threading.Thread(target=OpponentShooting.scrape_player, args=(player,)),
-        threading.Thread(target=Playtypes.scrape_player,        args=(player,)),
-        threading.Thread(target=Shooting.scrape_player,         args=(player,)),
-        threading.Thread(target=ShotDashboard.scrape_player,    args=(player,)),
-        threading.Thread(target=Tracking.scrape_player,         args=(player,)),
+        # threading.Thread(target=Boxscores.scrape_player,        args=(player,)),
+        # threading.Thread(target=Clutch.scrape_player,           args=(player,)),
+        # threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)),
+        # threading.Thread(target=General.scrape_player,          args=(player,)),
+        # threading.Thread(target=Hustle.scrape_player,           args=(player,)),
+        # threading.Thread(target=OpponentShooting.scrape_player, args=(player,)),
+        # threading.Thread(target=Playtypes.scrape_player,        args=(player,)),
+        # threading.Thread(target=Shooting.scrape_player,         args=(player,)),
+        # threading.Thread(target=ShotDashboard.scrape_player,    args=(player,)),
+        # threading.Thread(target=Tracking.scrape_player,         args=(player,)),
     ]
 
     for thread in threads:

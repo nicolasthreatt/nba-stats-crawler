@@ -76,16 +76,15 @@ def loadPlayerInfo(browser, mode="rosters"):
     table = None
     timeout = 20   # seconds
     try:
-        # TODO: Covert 8 to ROSTER_COLUMN_INDEX in headers.py
-        headers = browser.find_elements_by_tag_name('table tr th')
-        rows    = browser.find_elements_by_tag_name('table tr td')
+        headers = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz").find_elements(By.TAG_NAME, 'th')
+        rows    = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz").find_elements(By.TAG_NAME, 'td')
+        # print(rows)
 
         table   = dict()
         players = list()
         i = 0
         for row in rows:
             header = headers[i].text
-            # print(header, ": ", row.text)
             table[header.strip()] = row.text.lstrip()
             i += 1
     

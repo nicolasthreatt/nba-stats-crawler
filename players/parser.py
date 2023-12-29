@@ -1,4 +1,4 @@
-from tables.player import Player
+from players.tables.player import Player
 
 
 # Initialize Player with Biographical Information
@@ -34,7 +34,7 @@ def parse(table: dict, player_obj: Player):
     player_obj.draft_num = str(draft_num)
 
     games_played = table['GP']
-    player_obj.games_played = int(games_played)
+    player_obj.games_played = int(round(float(games_played), 0))
 
     pts          = table['PTS']
     player_obj.pts = float(pts)
@@ -62,5 +62,3 @@ def parse(table: dict, player_obj: Player):
 
     ast_pct      = table['AST%'].strip('%')
     player_obj.ast_pct = float(ast_pct)
-
-    return players

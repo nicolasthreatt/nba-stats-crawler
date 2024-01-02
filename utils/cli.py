@@ -8,8 +8,11 @@ def parse_arguments():
     parser.add_argument('--player', dest='player', type=str, nargs=2, metavar='', required=False,
                         help='Single Specified Player')
     
-    parser.add_argument('--all', dest='all', required=False, action='store_true',
-                        help='Every Player listed in nba.com/players')
+    parser.add_argument('--players', dest='players', required=False, action='store_true',
+                        help='All Players listed in nba.com/players')
+    
+    parser.add_argument('--teams', dest='teams', required=False, action='store_true',
+                        help='All 30 Teams')
     
     parser.add_argument('--rosters', dest='rosters', required=False, action='store_true',
                         help='Collect Each Team\'s Rosters')

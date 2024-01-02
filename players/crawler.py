@@ -3,7 +3,7 @@ from players import initializers
 # from .db.players import insert_player_data
 
 
-def collect_single_player(name: str, storage = None):
+def collect_single_player(name: str, storage: bool=False):
     fname, lname = name
 
     player = initializers.player(fname, lname)

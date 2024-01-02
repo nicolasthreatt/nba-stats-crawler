@@ -1,34 +1,43 @@
 import itertools
+from teams.tables.team import Team
+from utils.mappings import mascots
 
+CITIES = [city_mascot[0].title() for city_mascot in mascots]
+MASCOTS = [city_mascot[1].title() if city_mascot[1] != "SIXERS" else "76ers" for city_mascot in mascots]
 
-def parser(table: str, teams: dict):
+def parse(table: str, teams: dict):
 
-    rank = 1
-    isTeamNotinDict = False
+    # rank = 1
+    city = None
+    mascot = None
 
     # Parse statistic table
     for row, info in enumerate(table.split('\n')):
+        # print(info)
+        # print()
 
         # Throwaway junk lines (column names)
         if row > 0:
 
-            data = info.split(' ')
+            # Grab Team City
+            if info.strip() in CITIES:
+                city = info.strip()
+                continue
 
-            # Grab Team Name
-            if((len(data) == 2 or len(data) == 3)):
-                if info not in teams:
-                    # print(info)  # Team Name
-                    team = info.upper()
-                    teams[team] = Team()
-                    isTeamNotinDict = True
-                else:
-                    isTeamNotinDict = False
+            # Grab Team Mascot
+            if not info.isnumeric() and any(mascot in info.strip() for mascot in MASCOTS):
+                mascot = info.strip()
+                continue
+
+            # Grab Team Full Name
+            if city and mascot and city + ' ' + mascot not in teams:
+                team = city + ' ' + mascot
+                teams[team] = Team()
 
             # Grab Team's Respective Stats
-            elif(len(data) == 12 and isTeamNotinDict):
-                # print(info)  # Team Stats
-                # print()
-
+            data = info.split(' ')
+            if(len(data) == 12):
+    
                 # Create iterator
                 itr = itertools.count()
 

@@ -1,23 +1,21 @@
-from parser import parse
+from teams.parser import parse
 from selenium import webdriver
-from utils import browserutils
+from selenium.webdriver.common.by import By
 from utils.filters import groupBy
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 # Browse to Page with Team Info
 def initialize(season_year = '2020-21', season_type = 'Regular%20Season'):
-
     teams = dict()
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     for groupBy_key, groupBy_url in groupBy.items():
-        url = 'https://www.nba.com/standings?Section=overall'  + groupBy_url + '&Season=' + season_year # + '&SeasonType=' + season_type
+        url = 'https://www.nba.com/standings?Section=overall'  + groupBy_url + '&Season=' + season_year + '&SeasonType=' + season_type
         browser.get(url)
 
-        tables = browserutils.loadTeamPage(browser)
+        tables = browser.find_elements(By.CLASS_NAME, "Crom_table__p1iZz")
         for table in tables:
             parse(table.text, teams)
 

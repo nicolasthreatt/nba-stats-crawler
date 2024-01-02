@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from players.tables.player import Player
 from players.parser import parse
 from utils import browserutils
@@ -7,7 +6,6 @@ from utils import browserutils
 
 # Browse to correct player info page
 def player(fname: str, lname: str, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
-
     # Create player object
     player = Player()
 
@@ -18,7 +16,6 @@ def player(fname: str, lname: str, season_year: str = '2020-21', season_type: st
 
     # Start browser
     browser = webdriver.Chrome()
-
 
     # Browse to correct stat category
     url = 'https://nba.com/stats/' + table_type + stat_url + '?sort=&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type
@@ -40,7 +37,6 @@ def player(fname: str, lname: str, season_year: str = '2020-21', season_type: st
 
 # Browse to correct player info page
 def players(players_names: list, season_year: str = '2019-20', season_type: str = 'Regular%20Season'):
-
     # URL Configurations
     table_type  = 'players/'
     stat_url    = 'bio/'

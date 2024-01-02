@@ -1,4 +1,5 @@
 from players.crawler import collect_single_player, collect_all_players
+from teams.crawler import collect_all_teams
 from utils.cli import parse_arguments
 
 def main():
@@ -11,8 +12,8 @@ def main():
         collect_single_player(args.player, args.storage)
     elif args.players: # Collect all players (args.players)
         collect_all_players(args.storage)
-    # elif args.teams:
-    #     scrape_teams(args)
+    elif args.teams:
+        collect_all_teams(args.storage)
     else:
         exit('No player(s) specified')
 

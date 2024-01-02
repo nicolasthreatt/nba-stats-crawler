@@ -24,7 +24,7 @@ mascots = [
          [ "ORLANDO",          "MAGIC"        ],
          [ "PHILADELPHIA",     "SIXERS"       ],
          [ "PHOENIX",          "SUNS"         ],
-         [ "PORTLAND",         "Blazers"      ],
+         [ "PORTLAND",         "BLAZERS"      ],
          [ "SACRAMENTO",       "KINGS"        ],
          [ "SAN ANTONIO",      "SPURS"        ],
          [ "TORONTO",          "RAPTORS"      ],

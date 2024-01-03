@@ -1,22 +1,23 @@
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 from utils import browserutils
 
-NBA_STATS_URL = 'https://www.nba.com/stats/players/list/'
+NBA_STATS_URL = 'https://www.nba.com/players/'
 
 
-def get_players() -> list:
+def get_all_players() -> list:
     """
     Fetches NBA player names from the specified URL.
 
     Returns:
         List[str]: A list of formatted player names.
     """
-    with webdriver.Chrome(ChromeDriverManager().install()) as browser:
+    with webdriver.Chrome() as browser:
         browser.get(NBA_STATS_URL)
-        players_unformatted = browserutils.load_players_list(browser)
-    
-    players = format(players_unformatted)
+
+        # TODO: WAIT FOR PAGE TO FINISH LOADING
+        players = [player.text.replace("\n", " ") for player in browser.find_elements(By.CLASS_NAME, "RosterRow_playerName__G28lg")]
+
     return players
 
 

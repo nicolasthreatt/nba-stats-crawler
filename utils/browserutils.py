@@ -109,23 +109,23 @@ def loadPlayerInfo(browser, mode="rosters"):
         return None
 
 
-def loadPlayersList(browser):
+# def loadPlayersList(browser):
 
-    players = None
-    timeout = 20   # seconds
-    try:
-        WebDriverWait(browser, timeout).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
+#     players = None
+#     timeout = 20   # seconds
+#     try:
+#         WebDriverWait(browser, timeout).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
 
-        players = browser.find_elements_by_class_name('players-list__name')
-        return players
+#         players = browser.find_elements_by_class_name('players-list__name')
+#         return players
 
-    except TimeoutException:
-        print('TimeoutException')      # TODO: Add to debug log
-        return None
+#     except TimeoutException:
+#         print('TimeoutException')      # TODO: Add to debug log
+#         return None
 
-    except NoSuchElementException:
-        print('NoSuchElementException') # TODO: Add to debug log
-        return None
+#     except NoSuchElementException:
+#         print('NoSuchElementException') # TODO: Add to debug log
+#         return None
 
 
 def loadTeamRosters(browser):

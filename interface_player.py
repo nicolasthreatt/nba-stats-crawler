@@ -7,19 +7,6 @@ import threading
 
 from db import players as db
 
-from BoxScores import Boxscores
-from BoxOuts import BoxOuts
-from clutch import Clutch
-from defense_dashboard.scraper import player as DefenseDashboard
-from General import General
-from Hustle import Hustle
-from OpponentShooting import OpponentShooting
-from Player import Player
-from Playtype import Playtypes
-from Shooting import Shooting
-from ShotDashboard import ShotDashboard
-from Tracking import Tracking
-
 # MOVE TO ENUM CLASS
     # class StorageType(IntEnum):
     #     INSERT = 1
@@ -49,7 +36,7 @@ def collect_single_player(name, insert, update):
 
 
 def collect_all_players(insert, update):
-    playersNames = Player.get_players()
+    playersNames = Player.get_all_players()
     players      = Player.initialize_players(playersNames)
 
     for player in players:

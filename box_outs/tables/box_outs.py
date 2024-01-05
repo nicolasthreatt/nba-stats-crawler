@@ -1,7 +1,7 @@
 """
 BOX OUTS
 """
-from utils.Types import TableType
+from utils.types import TableType
 
 
 class BoxOuts:

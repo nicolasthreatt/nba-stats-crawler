@@ -1,6 +1,6 @@
 import itertools
 from utils.headers import getStatColumnType
-from utils.Types import TableType
+from utils.types import TableType
 
 # Collect Box Out Stats
 def parse(table: str, stat_key: str, player = None, teams = None):

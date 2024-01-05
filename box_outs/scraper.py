@@ -1,9 +1,10 @@
-from parser import parse
+from box_outs.parser import parse
+from box_outs.tables.box_outs import BoxOuts
+from players.tables.player import Player
 from selenium import webdriver
 from utils import browserutils
+from utils.types import TableType
 from utils.filters import *
-from utils.Player import Player
-from utils.Team import Team
 
 
 def player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
@@ -27,7 +28,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     browser.get(url)
 
     # Scrape stats if table exist
-    table = browserutils.loadStatTable(browser)
+    table = browserutils.loadStatTable(browser) # TODO - FIXME
     parse(table, stat_type.title(), player=player)
 
     # Close browser

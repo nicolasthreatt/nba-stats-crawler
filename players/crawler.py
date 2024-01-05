@@ -1,5 +1,7 @@
+from box_outs.scraper import player as box_outs_scraper
 import threading
 from players import initializers, fetcher
+
 # from .db.players import insert_player_data
 
 # from BoxScores import Boxscores
@@ -36,7 +38,7 @@ def collect_all_players(insert = False, update = False):
 
 def scrape_stats(player):
     threads = [
-        threading.Thread(target=BoxOuts.scrape_player,          args=(player,)),
+        threading.Thread(target=box_outs_scraper,          args=(player,)),
         # threading.Thread(target=box_scores.scrape_player,        args=(player,)),
         # threading.Thread(target=Clutch.scrape_player,           args=(player,)),
         # threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)),

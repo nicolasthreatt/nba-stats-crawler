@@ -2,9 +2,9 @@ from box_outs.parser import parse
 from box_outs.tables.box_outs import BoxOuts
 from players.tables.player import Player
 from selenium import webdriver
-from utils import browserutils
+from selenium.webdriver.common.by import By
+# from utils import browserutils
 from utils.types import TableType
-from utils.filters import *
 
 
 def player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
@@ -28,8 +28,9 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     browser.get(url)
 
     # Scrape stats if table exist
-    table = browserutils.loadStatTable(browser) # TODO - FIXME
-    parse(table, stat_type.title(), player=player)
+    # table = browserutils.loadStatTable(browser) # TODO: Delete or update
+    table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
+    parse(table.text, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()
@@ -63,9 +64,9 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
     browser.get(url)
 
     # Scrape stats if table exist
-    table = browserutils.loadStatTable(browser)
+    table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
     if table is not None:
-        parse(table, stat_type.title(), teams=teams)
+        parse(table.text, stat_type.title(), teams=teams)
 
     # Close browser
     browser.quit()

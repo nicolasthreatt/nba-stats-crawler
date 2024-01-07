@@ -2,12 +2,11 @@
 TODO:
     - CURRENTLY ONLY GETS 1ST PAGE OF TABLE; NEED TO GET ALL ROWS
 """
+from box_scores.parser import parse
+from box_scores.tables.box_scores import BoxScores
+from players.tables.player import Player
 from selenium import webdriver
-from utils import browserutils
-from utils.filters import *
-from utils.Player import Player
-from utils.Team import Team
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 
 
 def player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
@@ -25,21 +24,22 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat_type  = 'boxscores'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Browse to correct stat category
     url = 'https://nba.com/stats/' + table_type  + stat_type + '/?sort=&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type
     browser.get(url)
 
     # Scrape stats if table exist
-    table = browserutils.loadStatTable(browser)
-    parse(table, stat_type.title(), player=player)
+    # table = browserutils.loadStatTable(browser) # TODO: Delete or update
+    table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
+    parse(table.text, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()
 
 
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     """
     Produces each team's box scores stats from:
         - https://www.nba.com/stats/teams/boxscores/

@@ -1,4 +1,6 @@
 from box_outs.scraper import player as box_outs_scraper
+from box_scores.scraper import player as box_scores_sraper
+from clutch.scraper import player as clutch_scraper
 import threading
 from players import initializers, fetcher
 
@@ -38,9 +40,9 @@ def collect_all_players(insert = False, update = False):
 
 def scrape_stats(player):
     threads = [
-        threading.Thread(target=box_outs_scraper,          args=(player,)),
-        # threading.Thread(target=box_scores.scrape_player,        args=(player,)),
-        # threading.Thread(target=Clutch.scrape_player,           args=(player,)),
+        # threading.Thread(target=box_outs_scraper,          args=(player,)),
+        # threading.Thread(target=box_scores_sraper,         args=(player,)), # TODO: FIX ERROR - File "/Users/nicolasthreatt/nba-stats-crawler/box_scores/parser.py", line 65, in parse (ValueError: invalid literal for int() with base 10: '05/15/2021')
+        threading.Thread(target=clutch_scraper,           args=(player,)),
         # threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)),
         # threading.Thread(target=General.scrape_player,          args=(player,)),
         # threading.Thread(target=Hustle.scrape_player,           args=(player,)),

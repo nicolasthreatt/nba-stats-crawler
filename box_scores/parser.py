@@ -1,6 +1,6 @@
 import itertools
 from utils.headers import getStatColumnType
-from utils.Types import TableType
+from utils.types import TableType
 
 def parse(table: str, stat_type: str, player = None, team = None):
     """Parses the boxscore stats table and stores the data in the player/team object

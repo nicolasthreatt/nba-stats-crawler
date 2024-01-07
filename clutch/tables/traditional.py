@@ -1,3 +1,5 @@
+from utils.types import TableType
+
 # Tradional Stats
 class ClutchTradional:
     def __init__(self, table_type=None):

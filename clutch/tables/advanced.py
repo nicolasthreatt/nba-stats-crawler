@@ -1,3 +1,5 @@
+from utils.types import TableType
+
 # Advanced Stats
 class ClutchAdvanced:
     def __init__(self, table_type):

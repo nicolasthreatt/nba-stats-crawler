@@ -1,3 +1,5 @@
+from utils.types import TableType
+
 # Misc Stats
 class ClutchMisc:
     def __init__(self, table_type):

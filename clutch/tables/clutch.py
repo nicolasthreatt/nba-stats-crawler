@@ -1,12 +1,12 @@
 # clutch/clutch.py
-from columns import *
-from advanced import ClutchAdvanced
-from four_factors import ClutchFourFactors
-from misc import ClutchMisc
-from opponent import ClutchOpponent
-from scoring import ClutchScoring
-from traditional import ClutchTradional
-from usage import ClutchUsage
+from clutch.tables.columns import *
+from clutch.tables.advanced import ClutchAdvanced
+from clutch.tables.four_factors import ClutchFourFactors
+from clutch.tables.misc import ClutchMisc
+from clutch.tables.opponent import ClutchOpponent
+from clutch.tables.scoring import ClutchScoring
+from clutch.tables.traditional import ClutchTradional
+from clutch.tables.usage import ClutchUsage
 from utils.types import TableType
 
 
@@ -32,36 +32,36 @@ class Clutch(dict):
         if table_type == TableType.TEAM.name:
             self.clutch_win_pct    = float() # Win Percentage
 
-        create_tables(self, table_type)
+        self.create_tables(self, table_type)
 
     def __getattr__(self, key):
         return self[key]
 
-    def create_tables(StatClass: Clutch, table_type: TableType):
+    def create_tables(self, ClutchClass: dict, table_type: TableType):  # TODO: SEE if CluchClass can be removed
         """Create a dictionary of for each clutch stat table.
         This can be done for the `Clutch` class is represented as a dictionary.
 
         Args:
-            StatClass (Clutch): Clutch class
+            ClutchClass (Clutch): Clutch class
             table_type (str): Table type (player/team)
         """
         for clutch_stat_table in clutch_stats_tables:
             if clutch_stat_table == 'Traditional':
-                StatClass[clutch_stat_table] = ClutchTradional(table_type)
+                ClutchClass[clutch_stat_table] = ClutchTradional(table_type)
             elif clutch_stat_table == 'Advanced':
-                StatClass[clutch_stat_table] = ClutchAdvanced(table_type)
+                ClutchClass[clutch_stat_table] = ClutchAdvanced(table_type)
             elif clutch_stat_table == 'Misc':
-                StatClass[clutch_stat_table] = ClutchMisc(table_type)
+                ClutchClass[clutch_stat_table] = ClutchMisc(table_type)
             elif clutch_stat_table == 'Scoring':
-                StatClass[clutch_stat_table] = ClutchScoring(table_type)
+                ClutchClass[clutch_stat_table] = ClutchScoring(table_type)
             elif clutch_stat_table == 'Usage':
                 if(table_type == TableType.PLAYER.name):
-                    StatClass[clutch_stat_table] = ClutchUsage(table_type)
+                    ClutchClass[clutch_stat_table] = ClutchUsage(table_type)
             elif clutch_stat_table == 'Four Factors':
                 if(table_type == TableType.TEAM.name):
-                    StatClass[clutch_stat_table] = ClutchFourFactors(table_type)
+                    ClutchClass[clutch_stat_table] = ClutchFourFactors(table_type)
             elif clutch_stat_table == 'Opponent':
                 if(table_type == TableType.TEAM.name):
-                    StatClass[clutch_stat_table] = ClutchOpponent(table_type)
+                    ClutchClass[clutch_stat_table] = ClutchOpponent(table_type)
             else:
                 raise ValueError('Clutch Stat Type: ' + clutch_stat_table + ' not found.')

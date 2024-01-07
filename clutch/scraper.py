@@ -1,12 +1,12 @@
-
-from parser import parse
+from clutch.parser import parse
+from clutch.tables.columns import *
+from clutch.tables.clutch import Clutch, clutch_stats_tables
+from players.tables.player import Player
 from selenium import webdriver
-from tables.columns import *
-from tables.clutch import Clutch
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from utils.types import TableType
+from utils.browsertools import load_stat_table_page
+
 
 def player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     """Produces each player's clutch stats from:
@@ -27,7 +27,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat       = 'PLAYER_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get stats from correct url path
     for stat_key, stat_url in clutch_stats_tables.items():
@@ -39,15 +39,15 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
             browser.get(url)
 
             # Scrape stats if table exists
-            table = browserutils.loadStatTable(browser)
-            if table:
-                parse(table, stat_key, player=player)
+            table = load_stat_table_page(browser)
+            if table.text:
+                parse(table.text, stat_key, player=player)
 
     # Close browser
     browser.quit()
 
 
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     """Produces each team's clutch stats from:
         - https://www.nba.com/stats/teams/clutch-traditional/
         - https://www.nba.com/stats/teams/clutch-advanced/

@@ -83,5 +83,5 @@ type_grouping = {
 # Team Grouping
 groupBy = {
     'Conference': '&GroupBy=conf',
-    'Division':   '&GroupBy=div'
+    # 'Division':   '&GroupBy=div'
 }

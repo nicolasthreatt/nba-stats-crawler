@@ -1,11 +1,7 @@
 """
 TABLE HEADERS
 """
-
-import sys
-sys.path.append("..")
-
-from utils.Types import TableType
+from utils.types import TableType
 
 # Bio Stat Table
 BIO_HEADER_COLS                            = 0

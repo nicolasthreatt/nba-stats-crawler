@@ -17,11 +17,6 @@ def parse_arguments():
     parser.add_argument('--rosters', dest='rosters', required=False, action='store_true',
                         help='Collect Each Team\'s Rosters')
 
-    # MOVE TO ENUM CLASS
-    # class StorageType(IntEnum):
-    #     INSERT = 1
-    #     UPDATE = 2
-
     parser.add_argument('--storage', dest='storage', type=str, required=False, default=str(),
                         choices=['insert', 'update', ''],
                         help='Stores New Data into Table in Azure Database')

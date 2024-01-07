@@ -1,7 +1,7 @@
 from selenium import webdriver
 from players.tables.player import Player
 from players.parser import parse
-from utils import browserutils
+from utils import browsertools
 
 
 # Browse to correct player info page
@@ -22,7 +22,7 @@ def player(fname: str, lname: str, season_year: str = '2020-21', season_type: st
     browser.get(url)
 
     # Scrape stats
-    player_bio_table = browserutils.loadPlayerInfo(browser, mode="bios") # TODO: MOVE TO CRAWLER.PY
+    player_bio_table = browsertools.loadPlayerInfo(browser, mode="bios") # TODO: MOVE TO CRAWLER.PY
     if player_bio_table is not None:
         print('Initializing player...\n')
         parse(player_bio_table, player)

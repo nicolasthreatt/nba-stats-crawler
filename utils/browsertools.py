@@ -1,47 +1,43 @@
-'''
-BROWSER UTILS
-'''
-
-
+import sys
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-import itertools
-import sys
+
+# def loadPageToComplete(browser):
+#     timeout = 30
+#     try:
+#         WebDriverWait(browser, 30).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
+#     except TimeoutException:
+#         sys.exit('TimeoutException')      # TODO: Add to debug log
+#     except NoSuchElementException:
+#         sys.exit('NoSuchElementException') # TODO: Add to debug log
 
 
-def loadPageToComplete(browser):
-    timeout = 30
-    try:
-        WebDriverWait(browser, 30).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
-    except TimeoutException:
-        sys.exit('TimeoutException')      # TODO: Add to debug log
-    except NoSuchElementException:
-        sys.exit('NoSuchElementException') # TODO: Add to debug log
+# def loadTeamPage(browser, locator="//*[@class='StandingsGridRender_standingsContainer__2EwPy']"):
+#     timeout = 30
+#     try:
+#         ignored_exceptions = (NoSuchElementException, StaleElementReferenceException,)
+#         WebDriverWait(browser, 30).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
+#         return WebDriverWait(browser, 30,ignored_exceptions=ignored_exceptions)\
+#                             .until(EC.presence_of_all_elements_located((By.XPATH, locator)))
+#     except TimeoutException:
+#         print("Timed out waiting for page to load")
 
 
-def loadTeamPage(browser, locator="//*[@class='StandingsGridRender_standingsContainer__2EwPy']"):
-    timeout = 30
+def load_stat_table_page(browser, table_html_class="Crom_table__p1iZz", timeout=30):
     try:
         ignored_exceptions = (NoSuchElementException, StaleElementReferenceException,)
-        WebDriverWait(browser, 30).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
-        return WebDriverWait(browser, 30,ignored_exceptions=ignored_exceptions)\
-                            .until(EC.presence_of_all_elements_located((By.XPATH, locator)))
+        
+        WebDriverWait(browser, timeout).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
+        
+        return WebDriverWait(browser, timeout, ignored_exceptions=ignored_exceptions).until(
+            EC.presence_of_element_located((By.CLASS_NAME, table_html_class))
+        )
     except TimeoutException:
         print("Timed out waiting for page to load")
-
-
-def loadTeamsPlayersPage(browser, locator="//*[@class='StandingsGridRender_standingsContainer__2EwPy']"):
-    timeout = 30
-    try:
-        # ignored_exceptions = (NoSuchElementException, StaleElementReferenceException,)
-        WebDriverWait(browser, 30).until(lambda driver: driver.execute_script('return document.readyState') == 'complete')
-        # return WebDriverWait(browser, 30,ignored_exceptions=ignored_exceptions)\
-        #                     .until(EC.presence_of_element_located((By.XPATH, locator)))
-    except TimeoutException:
-        print("Timed out waiting for page to load")
+        return None
 
 
 def loadStatTable(browser, rank=None):
@@ -98,7 +94,7 @@ def loadPlayerInfo(browser, mode="rosters"):
         elif mode == 'bios':
             return table
         else:
-            sys.exit("Error. Invalid mode {}".format(mode))
+            sys.exit("Error. Invalid mode {}".format(mode)) # What about exit()?
 
     except TimeoutException:
         print('TimeoutException')      # TODO: Add to debug log

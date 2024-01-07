@@ -1,5 +1,6 @@
 import threading
 from box_outs.scraper import teams as box_outs_scraper
+from box_scores.scraper import teams as box_scores_sraper
 from teams.initializers import initialize
 # from db.teams import insert_teams_stats
 
@@ -13,8 +14,8 @@ def collect_all_teams(storage: bool=False):
 
 def scrape_stats(teams):
     threads = [
-        threading.Thread(target=box_outs_scraper,          args=(teams,)),
-        # threading.Thread(target=Boxscores.collectTeamStats, args=(teams,)),
+        # threading.Thread(target=box_outs_scraper,          args=(teams,)),
+        # threading.Thread(target=box_scores_sraper, args=(teams,)),
         # threading.Thread(target=Clutch.collectTeamStats, args=(teams,)),
         # threading.Thread(target=DefenseDashboard.collectTeamStats, args=(teams,)),
         # threading.Thread(target=General.collectTeamStats, args=(teams,)),

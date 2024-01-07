@@ -40,17 +40,17 @@ def collect_all_players(insert = False, update = False):
 
 def scrape_stats(player):
     threads = [
-        # threading.Thread(target=box_outs_scraper,          args=(player,)),
-        # threading.Thread(target=box_scores_sraper,         args=(player,)), # TODO: FIX ERROR - File "/Users/nicolasthreatt/nba-stats-crawler/box_scores/parser.py", line 65, in parse (ValueError: invalid literal for int() with base 10: '05/15/2021')
-        threading.Thread(target=clutch_scraper,           args=(player,)),
-        # threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)),
-        # threading.Thread(target=General.scrape_player,          args=(player,)),
-        # threading.Thread(target=Hustle.scrape_player,           args=(player,)),
-        # threading.Thread(target=OpponentShooting.scrape_player, args=(player,)),
-        # threading.Thread(target=Playtypes.scrape_player,        args=(player,)),
-        # threading.Thread(target=Shooting.scrape_player,         args=(player,)),
-        # threading.Thread(target=ShotDashboard.scrape_player,    args=(player,)),
-        # threading.Thread(target=Tracking.scrape_player,         args=(player,)),
+        # threading.Thread(target=box_outs_scraper,         args=(player,)),
+        # threading.Thread(target=box_scores_sraper,        args=(player,)), # TODO: FIX ERROR - File "/Users/nicolasthreatt/nba-stats-crawler/box_scores/parser.py", line 65, in parse (ValueError: invalid literal for int() with base 10: '05/15/2021')
+        # threading.Thread(target=clutch_scraper,           args=(player,)),
+        # threading.Thread(target=DefenseDashboard.scrape_player, args=(player,)), # TODO:
+        # threading.Thread(target=General.scrape_player,          args=(player,)), # TODO:
+        threading.Thread(target=Hustle.scrape_player,           args=(player,)), # TODO:
+        # threading.Thread(target=OpponentShooting.scrape_player, args=(player,)), # TODO:
+        # threading.Thread(target=Playtypes.scrape_player,        args=(player,)), # TODO:
+        # threading.Thread(target=Shooting.scrape_player,         args=(player,)), # TODO:
+        # threading.Thread(target=ShotDashboard.scrape_player,    args=(player,)), # TODO:
+        # threading.Thread(target=Tracking.scrape_player,         args=(player,)), # TODO:
     ]
 
     for thread in threads:

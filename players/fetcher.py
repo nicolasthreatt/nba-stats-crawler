@@ -1,6 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from utils import browserutils
 
 NBA_STATS_URL = 'https://www.nba.com/players/'
 

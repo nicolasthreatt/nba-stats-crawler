@@ -1,4 +1,5 @@
 import argparse
+from utils.types import StorageType
 
 
 def parse_arguments():
@@ -20,5 +21,8 @@ def parse_arguments():
     parser.add_argument('--storage', dest='storage', type=str, required=False, default=str(),
                         choices=['insert', 'update', ''],
                         help='Stores New Data into Table in Azure Database')
+
+    # parser.add_argument('--storage', dest='storage', type=StorageType, required=False, default=None,
+    #                      help='Insert New Data into Existing Table in Database')
 
     return parser.parse_args()

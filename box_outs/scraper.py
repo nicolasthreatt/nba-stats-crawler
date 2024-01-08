@@ -3,7 +3,7 @@ from box_outs.tables.box_outs import BoxOuts
 from players.tables.player import Player
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-# from utils import browserutils
+from utils.browsertools import load_stat_table_page
 from utils.types import TableType
 
 
@@ -28,9 +28,9 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     browser.get(url)
 
     # Scrape stats if table exist
-    # table = browserutils.loadStatTable(browser) # TODO: Delete or update
-    table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
-    parse(table.text, stat_type.title(), player=player)
+    table = load_stat_table_page(browser)
+    if table.text:
+        parse(table.text, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()

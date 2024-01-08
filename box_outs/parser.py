@@ -1,9 +1,10 @@
 import itertools
+from players.tables.player import Player
 from utils.headers import getStatColumnType
 from utils.types import TableType
 
 # Collect Box Out Stats
-def parse(table: str, stat_key: str, player = None, teams = None):
+def parse(table: str, stat_key: str, player: Player = None, teams: dict = None):
     """
     Parses box out stats from nba stats table and adds them to player/team object
 
@@ -14,7 +15,7 @@ def parse(table: str, stat_key: str, player = None, teams = None):
         teams (dict): teams dictionary
     """
 
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
     table_header_row, table_column_offset = getStatColumnType(stat_key, table_type)
 
     # Parse statistic table
@@ -25,10 +26,10 @@ def parse(table: str, stat_key: str, player = None, teams = None):
 
             # Get Correct Player/Team
             if (row % 2) == 1:
-                if player is not None:
+                if player:
                     player.name = info.title()
                     StatClass = player.boxOutStats
-                elif teams is not None:
+                elif teams:
                     team = info.upper()
 
                     StatClass = teams[team].boxOutStats
@@ -43,7 +44,7 @@ def parse(table: str, stat_key: str, player = None, teams = None):
                 data = info.split(' ')
                 data = [item.replace("-", "0") for item in data]
 
-                if teams is not None: next(itr) # Skip Minutes Column (Need to edit TableHeader.py)
+                if teams: next(itr) # Skip Minutes Column (Need to edit TableHeader.py)
 
                 boxouts = data[next(itr)]
                 StatClass.boxouts = float(boxouts)
@@ -54,7 +55,7 @@ def parse(table: str, stat_key: str, player = None, teams = None):
                 def_boxouts = data[next(itr)]
                 StatClass.def_boxouts = float(def_boxouts)
 
-                if player is not None:
+                if player:
                     team_reb_on_boxouts = data[next(itr)]
                     StatClass.team_reb_on_boxouts = float(team_reb_on_boxouts)
 
@@ -67,7 +68,7 @@ def parse(table: str, stat_key: str, player = None, teams = None):
                 pct_boxouts_def = data[next(itr)]
                 StatClass.pct_boxouts_def = float(pct_boxouts_def)
 
-                if player is not None:
+                if player:
                     pct_team_reb_when_boxout = data[next(itr)]
                     StatClass.pct_team_reb_when_boxout = float(pct_team_reb_when_boxout)
 

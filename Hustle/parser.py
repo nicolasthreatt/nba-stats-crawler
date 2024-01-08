@@ -1,15 +1,22 @@
 import itertools
 from utils.headers import getStatColumnType
-from utils.Player import Player
-from utils.Team import Team
-from utils.Types import TableType
+from players.tables.player import Player
+from utils.types import TableType
 
 
 # Collect Stats
-def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
+def parse(table: str, stat_type: str, player: Player = None, teams: dict = None):
+    """Parses the clutch stats table and stores the data in the player/team object
 
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
-    (table_header_row, table_column_offset) = getStatColumnType(stat_key, table_type)
+    Args:
+        table (str): nba.com/stats table containing the stats
+        stat_type (str): type of stat being parsed
+        player (Player): player object to store the stats
+        teams (dict): team object to store the stats
+    """
+
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
+    (table_header_row, table_column_offset) = getStatColumnType(stat_type, table_type)
 
     # Parse statistic table
     index = 1
@@ -21,12 +28,12 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
             # Get Info
             if (index % 2) == 1:
 
-                if player is not None:
+                if player:
                     name = info.title()
                     player.name = name
                     StatClass = player.hustle
 
-                elif teams is not None:
+                elif teams:
                     team = info.upper()
                     StatClass = teams[team].hustle
 

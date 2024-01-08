@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+import general.helpers as helpers
+from utils.types import TableType
 
 class GeneralTraditional:
     def __init__(self, table_type):
@@ -32,4 +32,5 @@ class GeneralTraditional:
             self.dd2    = int()   # Double-Double
             self.td3    = int()   # Triple-Double
 
-        create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Traditional'))
+        traditional_table_type = helpers.get_table_type(table_type, 'Traditional')
+        helpers.create_ranking_columns(self.rank_dict, traditional_table_type)

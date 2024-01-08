@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+# from general.tables.helpers import create_ranking_columns, get_table_type
+from utils.types import TableType
 
 
 class GeneralFourFactors:
@@ -15,4 +15,6 @@ class GeneralFourFactors:
             self.opp_oreb_pct   = float() # Opponent's Offensive Rebound Rate
 
             self.rank_dict      = dict()  # Dictionary to hold each stat rank
-            create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Four Factors')) 
+
+            four_factors_table_type = helpers.get_table_type(table_type, 'Four Factors')
+            helpers.create_ranking_columns(self.rank_dict, four_factors_table_type)

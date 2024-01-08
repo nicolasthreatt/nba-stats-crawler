@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+import general.helpers as helpers
+from utils.types import TableType
 
 
 class GeneralAdvanced:
@@ -23,4 +23,5 @@ class GeneralAdvanced:
         if table_type == TableType.PLAYER.name:
             self.usage  = float() # Usage
 
-        create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Advanced'))
+        advanced_table_type = helpers.get_table_type(table_type, 'Traditional')
+        helpers.create_ranking_columns(self.rank_dict, advanced_table_type)

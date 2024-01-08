@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+import general.helpers as helpers
+from utils.types import TableType
 
 
 class GeneralScoring:
@@ -21,4 +21,5 @@ class GeneralScoring:
         self.pct_pts_fgm_uast  = float() # Percent of Total Field Goals Made Unassisted
         self.rank_dict         = dict()  # Dictionary to hold each stat rank
 
-        create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Scoring'))
+        scoring_table_type = helpers.get_table_type(table_type, 'Scoring')
+        helpers.create_ranking_columns(self.rank_dict, scoring_table_type)

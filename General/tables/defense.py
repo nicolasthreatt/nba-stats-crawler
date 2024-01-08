@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+import general.helpers as helpers
+from utils.types import TableType
 
 
 class GeneralDefense:
@@ -21,4 +21,5 @@ class GeneralDefense:
             self.pct_blk        = float() # Percent of Team's Blocks
             self.def_ws         = float() # Defensive Win Shares
 
-        create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Defense'))
+        defense_table_type = helpers.get_table_type(table_type, 'Defense')
+        helpers.create_ranking_columns(self.rank_dict, defense_table_type)

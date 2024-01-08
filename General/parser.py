@@ -1,13 +1,12 @@
 import itertools
 from utils.headers import getStatColumnType
-from utils.Player import Player
-from utils.Team import Team
+from players.tables.player import Player
 from utils.types import TableType
 
 
-def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
+def parse(table: str, stat_key: str, player: Player = None, team: dict = None):
 
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
     (table_header_row, table_column_offset) = getStatColumnType('General ' + stat_key, table_type)
 
     # Parse statistic table
@@ -20,12 +19,12 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
             # Get Correct Class
             if (index % 2) == 1:
 
-                if player is not None:
+                if player:
                     name = info.title()
                     player.name = name
                     StatClass = player
 
-                elif teams is not None:
+                elif teams:
                     team = info.upper()
                     StatClass = teams[team]
 
@@ -51,7 +50,7 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     mins       = data[next(itr)]
                     StatClass.mins = float(mins)
 
-                    if teams is not None:
+                    if teams:
                         win_p = data[next(itr)]
                         StatClass.win_p = float(win_p)
 
@@ -106,18 +105,18 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     blk        = data[next(itr)]
                     StatClass.general[stat_key].blk = float(blk)
 
-                    if teams is not None:
+                    if teams:
                         blk_a = data[next(itr)]
                         StatClass.general[stat_key].blk_a = float(blk_a)
 
                     pf_c      = data[next(itr)]
                     StatClass.general[stat_key].pf_c = float(pf_c)
 
-                    if teams is not None:
+                    if teams:
                         pf_d = data[next(itr)]
                         StatClass.general[stat_key].pf_d = float(pf_d)
 
-                    if player is not None:
+                    if player:
                         fp         = data[next(itr)]
                         StatClass.general[stat_key].fp = float(fp)
 
@@ -164,7 +163,7 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     efg_pct = data[next(itr)]
                     StatClass.general[stat_key].efg_pct = float(efg_pct)
 
-                    if player is not None:
+                    if player:
                         usage = data[next(itr)]
                         StatClass.general[stat_key].usage = float(usage)
 
@@ -202,7 +201,7 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     opp_pts_in_paint = data[next(itr)]
                     StatClass.general[stat_key].opp_pts_in_paint = float(opp_pts_in_paint)
 
-                    if player is not None:
+                    if player:
                         blk = data[next(itr)]
                         StatClass.general[stat_key].blk = float(blk)
 
@@ -387,21 +386,21 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     dreb_pct           = data[next(itr)]
                     StatClass.general[stat_key].dreb_pct = float(dreb_pct)
 
-                    if player is not None:
+                    if player:
                         pct_dreb       = data[next(itr)]
                         StatClass.general[stat_key].pct_dreb = float(pct_dreb)
 
                     stl                = data[next(itr)]
                     StatClass.general[stat_key].stl = float(stl)
 
-                    if player is not None:
+                    if player:
                         pct_stl        = data[next(itr)]
                         StatClass.general[stat_key].pct_stl = float(pct_stl)
 
                     blk                = data[next(itr)]
                     StatClass.general[stat_key].blk = float(blk)
 
-                    if player is not None:
+                    if player:
                         pct_blk        = data[next(itr)]
                         StatClass.general[stat_key].pct_blk = float(pct_blk)
 
@@ -417,7 +416,7 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     opp_pts_in_paint   = data[next(itr)]
                     StatClass.general[stat_key].opp_pts_in_paint = float(opp_pts_in_paint)
 
-                    if player is not None:
+                    if player:
                         def_ws         = data[next(itr)]
                         StatClass.general[stat_key].def_ws = float(def_ws)
 

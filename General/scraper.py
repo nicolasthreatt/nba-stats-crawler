@@ -1,11 +1,11 @@
-from parser import parse
+from general.parser import parse
+from general.tables.general import General
+from general.helpers import stats_urls_tables
+from players.tables.player import Player
 from selenium import webdriver
-from tables.general import General
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from utils.Types import TableType
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from utils.browsertools import load_stat_table_page
+from utils.types import TableType
 
 
 # Store Stats to Player
@@ -30,28 +30,26 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat       = 'PLAYER_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get stats from correct url path
-    for stat_key, stat_url in general_tables.items():
-
+    for stat_key, stat_url in stats_urls_tables.items():
         if stat_key != 'Four Factors':
-
             # Browse to correct stat category
             url = 'https://nba.com/stats/' + table_type + stat_url + '/#!?CF=PLAYER_NAME*E*' + name + '&sort=' + stat + '&Season=' + season_year + '&SeasonType=' + season_type
             browser.get(url)
 
             # Scrape stats if table exists
-            table = browserutils.loadStatTable(browser)
-            if table is not None:
-                parse(table, stat_key.title(), player=player)
+            table = load_stat_table_page(browser)
+            if table.text:
+                parse(table.text, stat_key.title(), player=player)
 
     # Close browser
     browser.quit()
 
 
 # Store Stats to Teams
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each team's general stats from:
         - https://nba.com/stats/teams/traditional/

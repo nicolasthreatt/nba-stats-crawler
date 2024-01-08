@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+import general.helpers as helpers
+from utils.types import TableType
 
 
 class GeneralOpponent:
@@ -27,4 +27,5 @@ class GeneralOpponent:
         self.opp_plusminus  = float() # Opponent's Plus Minus
         self.rank_dict      = dict()  # Dictionary to hold each stat rank
 
-        create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Opponent')) 
+        opponent_table_type = helpers.get_table_type(table_type, 'Opponent')
+        helpers.create_ranking_columns(self.rank_dict, opponent_table_type)

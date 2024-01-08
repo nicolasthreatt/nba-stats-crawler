@@ -1,5 +1,5 @@
-from general import create_ranking_columns, get_table_type
-from utils.Types import TableType
+import general.helpers as helpers
+from utils.types import TableType
 
 
 class GeneralMisc:
@@ -20,5 +20,6 @@ class GeneralMisc:
             self.fouls_c        = float() # Personal Fouls Commited Per Game
             self.fouls_d        = float() # Personal Fouls Drawn Per Game
 
-        create_ranking_columns(self.rank_dict, get_table_type(table_type, 'Misc'))
+            misc_table_type = helpers.get_table_type(table_type, 'Misc')
+            helpers.create_ranking_columns(self.rank_dict, misc_table_type)
 

@@ -2,20 +2,22 @@
 import itertools
 from utils.headers import getStatColumnType
 from players.tables.player import Player
+from teams.tables.team import Team
 from utils.types import TableType
 
-def parse(table: str, stat_type: str, player: Player = None, team = None):
+
+def parse(table: str, stat_type: str, player: Player = None, teams: dict = None):
     """Parses the clutch stats table and stores the data in the player/team object
 
     Args:
-        table (str): The nba.com/stats table containing the stats
-        stat_type (str): The type of stat being parsed
-        player (Player): The player object to store the stats
-        team (Team): The team object to store the stats
+        table (str): nba.com/stats table containing the stats
+        stat_type (str): type of stat being parsed
+        player (Player): player object to store the stats
+        teams (Team): team object to store the stats
     """
 
     # Get correct table type
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
     table_header_row, table_column_offset = getStatColumnType('Clutch ' + stat_type, table_type)
 
     # Parse statistic table
@@ -28,12 +30,12 @@ def parse(table: str, stat_type: str, player: Player = None, team = None):
             # Get Correct Player/Team
             if (index % 2) == 1:
 
-                if player is not None:
+                if player:
                     name = info.title()
                     player.name = name
                     StatClass = player.clutch
 
-                elif teams is not None:
+                elif teams:
                     team = info.upper()
 
                     StatClass = teams[team].clutch
@@ -57,7 +59,7 @@ def parse(table: str, stat_type: str, player: Player = None, team = None):
                     clutch_losses    = data[next(itr)]
                     StatClass.clutch_losses = int(clutch_losses)
 
-                    if teams is not None:
+                    if teams:
                         clutch_win_pct    = data[next(itr)]
                         StatClass.clutch_win_pct = float(clutch_win_pct)
 
@@ -115,25 +117,25 @@ def parse(table: str, stat_type: str, player: Player = None, team = None):
                     clutch_blk       = data[next(itr)]
                     StatClass[stat_type].clutch_blk = float(clutch_blk)
 
-                    if teams is not None:
+                    if teams:
                         clutch_blk_a = data[next(itr)]
                         StatClass[stat_type].clutch_blk = float(clutch_blk_a)
 
                     clutch_fouls_c   = data[next(itr)]
                     StatClass[stat_type].clutch_fouls_c = float(clutch_fouls_c)
 
-                    if player is not None:
+                    if player:
                         clutch_fp    = data[next(itr)]
                         StatClass[stat_type].clutch_fp = float(clutch_fp)
 
-                    if teams is not None:
+                    if teams:
                         clutch_fouls_d = data[next(itr)]
                         StatClass[stat_type].clutch_fouls_d = float(clutch_fouls_d)
 
-                    if player is not None:
+                    if player:
                         clutch_plusminus = data[next(itr) + 2]  # Skip DD and TD Columns for Player
 
-                    if teams is not None:
+                    if teams:
                         clutch_plusminus = data[next(itr)]
 
                     StatClass[stat_type].clutch_plusminus = float(clutch_plusminus)
@@ -175,7 +177,7 @@ def parse(table: str, stat_type: str, player: Player = None, team = None):
                     clutch_ts_pct        = data[next(itr)]
                     StatClass[stat_type].clutch_ts_pct = float(clutch_ts_pct)
 
-                    if player is not None:
+                    if player:
                         clutch_usage     = data[next(itr)]
                         StatClass[stat_type].clutch_usage = float(clutch_usage)
 
@@ -210,7 +212,7 @@ def parse(table: str, stat_type: str, player: Player = None, team = None):
                     clutch_opp_pts_in_paint   = data[next(itr)]
                     StatClass[stat_type].clutch_opp_pts_in_paint = float(clutch_opp_pts_in_paint)
 
-                    if player is not None:
+                    if player:
                         clutch_blk            = data[next(itr)]
                         StatClass[stat_type].clutch_blk = float(clutch_blk)
 

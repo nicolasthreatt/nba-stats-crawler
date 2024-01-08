@@ -2,6 +2,17 @@
 TABLE COLUMNS
 '''
 
+
+defense_dashboard_types = {
+    'Overall':           'defense-dash-overall',
+    '3 Pointer':         'defense-dash-3pt',
+    '2 Pointer':         'defense-dash-2pt',
+    'Less than 6ft':     'defense-dash-lt6',
+    'Less than 10ft':    'defense-dash-lt10',
+    'Greater than 15ft': 'defense-dash-gt15',
+}
+
+
 dd_overall_team_stats = [
     'TEAM_NAME',
     'FREQ_WHOLE_NUM',

@@ -1,17 +1,4 @@
-'''
-DEFENSE DASHBOARD
-'''
-from columns import *
-
-
-defense_dashboard_types = {
-    'Overall':           'defense-dash-overall',
-    '3 Pointer':         'defense-dash-3pt',
-    '2 Pointer':         'defense-dash-2pt',
-    'Less than 6ft':     'defense-dash-lt6',
-    'Less than 10ft':    'defense-dash-lt10',
-    'Greater than 15ft': 'defense-dash-gt15',
-}
+from defense.tables.columns import *
 
 
 class DefensiveDashboard(dict):

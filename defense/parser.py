@@ -1,18 +1,19 @@
 
 import itertools
+from players.tables.player import Player
 from utils.headers import getStatColumnType
 from utils.types import TableType
 
 
 # Collect Defensive Dashboard Stats
-def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
+def parse(table: str, stat_type: str, player: Player = None, teams: dict = None):
     """Parses the defensive dashbaord stats table and stores the data in the player/team object
 
     Args:
-        table (str): The nba.com/stats table containing the stats
-        stat_type (str): The type of stat being parsed
-        player (Player): The player object to store the stats
-        team (Team): The team object to store the stats
+        table (str): nba.com/stats table containing the stats
+        stat_type (str): type of stat being parsed
+        player (Player): player object to store the stats
+        team (dict): team object to store the stats
     """
 
     table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name

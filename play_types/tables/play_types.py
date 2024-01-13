@@ -1,7 +1,8 @@
 from utils.filters import type_grouping  # TODO: Add offensive and defensive advanced filter
 
 
-playtypes = {
+# TODO: MOVE TO UTILS
+play_types_stats_types = {
     'Transition':   'transition/',       # Transition
     'Isolation':    'isolation/',        # Iso
     'Ball Handler': 'ball-handler/',     # Pick & Role Ball Handler
@@ -18,7 +19,10 @@ playtypes = {
 
 class Playtype(dict):
     def __init__(self):
-        init(self)
+        for playtype in play_types_stats_types:
+            for typegroup_key in type_grouping:
+                key = playtype + ' (' + typegroup_key.title() + ')'
+                self[key] = PlaytypeStats()
 
     def __getattr__(self, key):
         return self[key]
@@ -41,10 +45,3 @@ class PlaytypeStats:
         self.and1_freq  = float() # And1 Frequency
         self.score_freq = float() # Scoring Frequency
         self.percentile = float() # Percentile
-
-
-def init(PlayTypeClass: Playtype):
-    for playtype in playtypes:
-        for typegroup_key in type_grouping:
-            key = playtype + ' (' + typegroup_key.title() + ')'
-            PlayTypeClass[key] = PlaytypeStats()

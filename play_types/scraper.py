@@ -1,12 +1,12 @@
-
-from parser import parse
+from players.tables.player import Player
+from play_types.parser import parse
+from play_types.tables.play_types import Playtype
+from play_types.tables.play_types import play_types_stats_types
 from selenium import webdriver
-from tables.columns import *
-from tables.play_types import Playtype
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from utils.browsertools import load_stat_table_page
+from utils.filters import type_grouping
+from utils.types import TableType
 
 
 # Store Stats to Player
@@ -35,10 +35,10 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat       = 'PLAYER_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get stats from correct url path
-    for playtype_key, playtype_url in playtypes.items():
+    for playtype_key, playtype_url in play_types_stats_types.items():
         for typegroup_key, typegroup_url in type_grouping.items():
 
             # Browse to correct stat category
@@ -46,17 +46,16 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
             browser.get(url)
 
             # Scrape stats if table exist
-            table = browserutils.loadStatTable(browser)
-            
-            if table is not None:
-                parse(table, playtype_key +' (' + typegroup_key.title() + ')', player=player)
+            table = load_stat_table_page(browser)
+            if table.text:
+                parse(table.text, playtype_key +' (' + typegroup_key.title() + ')', player=player)
 
     # Close browser
     browser.quit()
 
 
 # Store Stats to Teams
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each player's playtype stats from:
         - https://www.nba.com/stats/teams/transition/

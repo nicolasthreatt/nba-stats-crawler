@@ -65,7 +65,7 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
 
     # Scrape stats if table exist
     table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
-    if table is not None:
+    if table.text:
         parse(table.text, stat_type.title(), teams=teams)
 
     # Close browser

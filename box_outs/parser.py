@@ -3,6 +3,7 @@ from players.tables.player import Player
 from utils.headers import getStatColumnType
 from utils.types import TableType
 
+
 # Collect Box Out Stats
 def parse(table: str, stat_key: str, player: Player = None, teams: dict = None):
     """

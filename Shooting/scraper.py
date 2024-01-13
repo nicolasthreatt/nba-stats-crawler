@@ -1,18 +1,18 @@
-from parser import parse
+from players.tables.player import Player
 from selenium import webdriver
-from tables.shooting import Shooting
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from utils.Types import TableType
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from shooting.parser import parse
+from shooting.tables.shooting import Shooting
+from utils.browsertools import load_stat_table_page
+from utils.filters import distance_range
+from utils.types import TableType
 
 
 # Store Stats to Player
 def player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each player's shooting stats from:
-        - https://wwww.nba.com/stats/players/shooting/
+        - https://www.nba.com/stats/players/shooting/
     '''
 
     # Add stat class to player
@@ -25,7 +25,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat       = 'PLAYER_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get stats from correct url path
     for shooting_distance_range_key, shooting_distance_range_url in distance_range.items():
@@ -35,16 +35,16 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
         browser.get(url)
         
         # Scrape stats if table exist
-        table = browserutils.loadStatTable(browser)
-        if table is not None:
-            parse(table, shooting_distance_range_key, player=player)
+        table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
+        if table.text:
+            parse(table.text, shooting_distance_range_key, player=player)
 
     # Close browser
     browser.quit()
 
 
 # Store Stats to Teams
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each teams's shooting stats from:
         - https://www.nba.com/stats/teams/shooting/

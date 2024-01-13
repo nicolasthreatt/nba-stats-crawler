@@ -1,13 +1,12 @@
 import itertools
+from players.tables.player import Player
 from utils.headers import getStatColumnType
-from utils.Player import Player
-from utils.Team import Team
 from utils.types import TableType
 
 # Get Shooting Stats
-def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
+def parse(table: str, stat_type: str, player: Player = None, teams: dict = None):
 
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
     (table_header_row, table_column_offset) = getStatColumnType('Shooting ' + stat_type, table_type)
 
     # Parse statistic table
@@ -20,12 +19,12 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
             # Get Correct Player/Team
             if (index % 2) == 1:
 
-                if player is not None:
+                if player:
                     name = info.title()
                     player.name = name
                     ShootingClass = player
 
-                elif teams is not None:
+                elif teams:
                     team = info.upper()
                     ShootingClass = teams[team]
 

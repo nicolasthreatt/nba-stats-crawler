@@ -1,11 +1,13 @@
-from parser import parse
+from opponent_shooting.parser import parse
 from selenium import webdriver
-from tables.opponent_shooting import OpponentShooting, opponent_shooting_stats_types
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from utils.Types import TableType
-from webdriver_manager.chrome import ChromeDriverManager
+from opponent_shooting.tables.opponent_shooting import OpponentShooting
+from opponent_shooting.tables.opponent_shooting import opponent_shooting_stats_types
+from players.tables.player import Player
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from utils.browsertools import load_stat_table_page
+from utils.filters import distance_range
+from utils.types import TableType
 
 
 # Store Stats to Player
@@ -25,7 +27,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat_url   = list(opponent_shooting_stats_types.values())[0] 
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get stats from correct url path
     for distance_range_key, distance_range_url in distance_range.items():
@@ -35,16 +37,16 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
         browser.get(url)
 
         # Scrape stats if table exist
-        table = browserutils.loadStatTable(browser)
-        if table is not None:
-            parse(table, distance_range_key, 'Opponent Shooting ' + stat_key + ' ' + distance_range_key, player=player)
+        table = load_stat_table_page(browser)
+        if table.text:
+            parse(table.text, 'Opponent Shooting ' + stat_key + ' ' + distance_range_key, player=player)
 
     # Close browser
     browser.quit()
 
 
 # Store Stats to Teams
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each team's opponent shooting stats from:
         - https://www.nba.com/stats/teams/opponent-shooting/

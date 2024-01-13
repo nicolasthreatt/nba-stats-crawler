@@ -7,6 +7,7 @@ from utils.filters import (
 )
 
 
+# TODO: MOVE TO UTILS
 shot_dashboard_types = {
     'general':             shot_range,                      # General
     'shotclock':           shot_clock_range,                # Shotclock
@@ -19,7 +20,10 @@ shot_dashboard_types = {
 
 class ShotDashboard(dict):
     def __init__(self, table_type=None):
-        init(self)
+        for shot_dashboard_key, stat_type_dict in shot_dashboard_types.items():
+            for stat_filter_key in stat_type_dict.keys():
+                key = shot_dashboard_key.title() + ': ' + stat_filter_key
+                self[key] = ShotDashboardStats()
 
     def __getattr__(self, key):
         return self[key]
@@ -41,11 +45,3 @@ class ShotDashboardStats:
         self.fg3_m     = float() # Three Field Goals Made
         self.fg3_a     = float() # Three Field Goals Attemped
         self.fg3_pct   = float() # Three Field Goal Percentage
-
-
-# Get Shot Dashboard Stats
-def init(ShotDashboardClass):
-    for shot_dashboard_key, stat_type_dict in shot_dashboard_types.items():
-        for stat_filter_key in stat_type_dict.keys():
-            key = shot_dashboard_key.title() + ': ' + stat_filter_key
-            ShotDashboardClass[key] = ShotDashboardStats()

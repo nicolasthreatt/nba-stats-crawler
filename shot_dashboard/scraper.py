@@ -1,10 +1,11 @@
-from parser import parse
+from players.tables.player import Player
 from selenium import webdriver
-from tables.shot_dashboard import ShotDashboard
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from shot_dashboard.parser import parse
+from shot_dashboard.tables.shot_dashboard import ShotDashboard
+from shot_dashboard.tables.shot_dashboard import shot_dashboard_types
+from utils.browsertools import load_stat_table_page
+from utils.types import TableType
 
 
 # Store Stats to Player
@@ -29,7 +30,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat       = 'PLAYER_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get Stats and Respective Ranking
     for shot_dashboard_type, shot_dashboard_stats in shot_dashboard_types.items():
@@ -42,16 +43,16 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
             browser.get(url)
 
             # Scrape stats if table exist
-            table = browserutils.loadStatTable(browser)
-            if table is not None:
-                parse(table, shot_dashboard_key, player=player)
+            table = load_stat_table_page(browser)
+            if table.text:
+                parse(table.text, shot_dashboard_key, player=player)
 
     browser.quit()
 
 
 
 # Store Stats to Teams
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each player's shot dashboard stats from:
         - https://www.nba.com/stats/teams/shots-general/

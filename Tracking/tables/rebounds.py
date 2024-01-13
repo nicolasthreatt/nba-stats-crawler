@@ -1,4 +1,4 @@
-from utils.Types import TableType
+from utils.types import TableType
 
 class Rebounding:
     def __init__(self, table_type):

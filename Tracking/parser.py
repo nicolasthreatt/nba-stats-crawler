@@ -1,13 +1,12 @@
 import itertools
+from players.tables.player import Player
 from utils.headers import getStatColumnType
-from utils.Player import Player
-from utils.Team import Team
 from utils.types import TableType
 
 
-def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
+def parse(table: str, stat_key: str, player: Player = None, teams: dict = None):
 
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
     (table_header_row, table_column_offset) = getStatColumnType('Tracking ' + stat_key, table_type)
 
     # Parse statistic table
@@ -20,12 +19,12 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
             # Get Correct Player/Team
             if (index % 2) == 1:
 
-                if player is not None:
+                if player:
                     name = info.title()
                     player.name = name
                     StatClass = player
 
-                elif teams is not None:
+                elif teams:
                     team = info.upper()
                     StatClass = teams[team]
 
@@ -250,7 +249,7 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     adj_reb_chance_pct   = data[next(itr)]
                     StatClass.tracking[stat_key].adj_reb_chance_pct = float(adj_reb_chance_pct)
 
-                    if player is not None:
+                    if player:
                         avg_reb_dist     = data[next(itr)]
                         StatClass.tracking[stat_key].avg_reb_dist = float(avg_reb_dist)
 
@@ -302,7 +301,7 @@ def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
                     adj_dreb_chance_pct   = data[next(itr)]
                     StatClass.tracking[stat_key].adj_dreb_chance_pct = float(adj_dreb_chance_pct)
 
-                    if player is not None:
+                    if player:
                         avg_dreb_dist     = data[next(itr)]
                         StatClass.tracking[stat_key].avg_dreb_dist = float(avg_dreb_dist)
 

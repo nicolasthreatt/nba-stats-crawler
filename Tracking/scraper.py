@@ -1,11 +1,10 @@
-from parser import parse
+from players.tables.player import Player
 from selenium import webdriver
-from tables.tracking import Tracking, tracking_tables
-from utils import browserutils
-from utils.Player import Player
-from utils.Team import Team
-from utils.Types import TableType
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from tracking.parser import parse
+from tracking.tables.tracking import Tracking, tracking_tables
+from utils.browsertools import load_stat_table_page
+from utils.types import TableType
 
 
 # Store Stats to Player
@@ -37,26 +36,26 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     stat       = 'PLAYER_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get stats from correct url path
     for stat_key, stat_url in tracking_tables.items():
 
         # Browse to correct stat category
-        url = 'https://nba.com/stats/' + table_type + stat_url + '#!?CF=PLAYER_NAME*E*' + name + '&sort=' + stat + '&Season=' + season_year + '&SeasonType=' + season_type
+        url = 'https://nba.com/stats/' + table_type + stat_url + '/?CF=PLAYER_NAME*E*' + name + '&sort=' + stat + '&Season=' + season_year + '&SeasonType=' + season_type
         browser.get(url)
 
         # Scrape stats if table exist
-        table = browserutils.loadStatTable(browser)
-        if table is not None:
-            parse(table, stat_key, player=player)
+        table = load_stat_table_page(browser)
+        if table.text:
+            parse(table.text, stat_key, player=player)
 
     # Close browser
     browser.quit()
 
 
 # Store Stats to Teams
-def teams(teams: Team, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
     '''
     Produces each team's tracking stats from:
         - https://nba.com/stats/teams/drives/

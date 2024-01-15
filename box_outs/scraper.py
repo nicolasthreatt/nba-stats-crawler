@@ -29,14 +29,14 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
 
     # Scrape stats if table exist
     table = load_stat_table_page(browser)
-    if table.text:
+    if table:
         parse(table.text, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()
 
 
-def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
+def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular+Season'):
     """
     Produces each teams's box out stats from:
         - https://www.stats.nba.com/teams/box-outs/
@@ -60,12 +60,12 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
     browser = webdriver.Chrome()
 
     # Browse to correct stat category
-    url = 'https://nba.com/stats/' + table_type + stat_type + '/?sort=' + stat + '&dir=-1' + '&Season=' + season_year + season_type
+    url = 'https://nba.com/stats/' + table_type + stat_type + '/?sort=' + stat + '&dir=-1' + '&Season=' + season_year + '&SeasonType=' + season_type
     browser.get(url)
 
     # Scrape stats if table exist
     table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
-    if table.text:
+    if table:
         parse(table.text, stat_type.title(), teams=teams)
 
     # Close browser

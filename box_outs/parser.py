@@ -1,5 +1,6 @@
 import itertools
 from players.tables.player import Player
+from utils.browsertools import find_team_name
 from utils.headers import getStatColumnType
 from utils.types import TableType
 
@@ -26,52 +27,49 @@ def parse(table: str, stat_key: str, player: Player = None, teams: dict = None):
         if row > table_header_row:
 
             # Get Correct Player/Team
-            if (row % 2) == 1:
-                if player:
-                    player.name = info.title()
-                    StatClass = player.boxOutStats
-                elif teams:
-                    team = info.upper()
+            if player:
+                name = info.title()
+                player.name = name
+                StatClass = player.boxOutStats
+            elif teams:
+                team = find_team_name(info)
+                info = info.replace(team, '').strip()
+                StatClass = teams[team].boxOutStats
 
-                    StatClass = teams[team].boxOutStats
+            # Create iterator to extract stats
+            itr = itertools.count(table_column_offset)
 
-            # Extract stats
-            if (row % 2) == 0:
+            # Split info from table into a list
+            data = info.split(' ')
+            data = [item.replace("-", "0") for item in data]
 
-                # Create iterator
-                itr = itertools.count(table_column_offset)
+            if teams: next(itr) # Skip Minutes Column (Need to edit TableHeader.py)
 
-                # Split info from table into a list
-                data = info.split(' ')
-                data = [item.replace("-", "0") for item in data]
+            boxouts = data[next(itr)]
+            StatClass.boxouts = float(boxouts)
 
-                if teams: next(itr) # Skip Minutes Column (Need to edit TableHeader.py)
+            off_boxouts = data[next(itr)]
+            StatClass.off_boxouts = float(off_boxouts)
 
-                boxouts = data[next(itr)]
-                StatClass.boxouts = float(boxouts)
+            def_boxouts = data[next(itr)]
+            StatClass.def_boxouts = float(def_boxouts)
 
-                off_boxouts = data[next(itr)]
-                StatClass.off_boxouts = float(off_boxouts)
+            if player:
+                team_reb_on_boxouts = data[next(itr)]
+                StatClass.team_reb_on_boxouts = float(team_reb_on_boxouts)
 
-                def_boxouts = data[next(itr)]
-                StatClass.def_boxouts = float(def_boxouts)
+                player_reb_on_boxouts = data[next(itr)]
+                StatClass.player_reb_on_boxouts = float(player_reb_on_boxouts)
 
-                if player:
-                    team_reb_on_boxouts = data[next(itr)]
-                    StatClass.team_reb_on_boxouts = float(team_reb_on_boxouts)
+            pct_boxouts_off = data[next(itr)]
+            StatClass.pct_boxouts_off = float(pct_boxouts_off)
 
-                    player_reb_on_boxouts = data[next(itr)]
-                    StatClass.player_reb_on_boxouts = float(player_reb_on_boxouts)
+            pct_boxouts_def = data[next(itr)]
+            StatClass.pct_boxouts_def = float(pct_boxouts_def)
 
-                pct_boxouts_off = data[next(itr)]
-                StatClass.pct_boxouts_off = float(pct_boxouts_off)
+            if player:
+                pct_team_reb_when_boxout = data[next(itr)]
+                StatClass.pct_team_reb_when_boxout = float(pct_team_reb_when_boxout)
 
-                pct_boxouts_def = data[next(itr)]
-                StatClass.pct_boxouts_def = float(pct_boxouts_def)
-
-                if player:
-                    pct_team_reb_when_boxout = data[next(itr)]
-                    StatClass.pct_team_reb_when_boxout = float(pct_team_reb_when_boxout)
-
-                    pct_player_reb_when_boxout = data[next(itr)]
-                    StatClass.pct_player_reb_when_boxout = float(pct_player_reb_when_boxout)
+                pct_player_reb_when_boxout = data[next(itr)]
+                StatClass.pct_player_reb_when_boxout = float(pct_player_reb_when_boxout)

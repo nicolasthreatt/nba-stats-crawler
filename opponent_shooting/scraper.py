@@ -6,7 +6,7 @@ from players.tables.player import Player
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from utils.browsertools import load_stat_table_page
-from utils.filters import distance_range
+from utils.filters import *
 from utils.types import TableType
 
 
@@ -38,7 +38,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
 
         # Scrape stats if table exist
         table = load_stat_table_page(browser)
-        if table.text:
+        if table:
             parse(table.text, 'Opponent Shooting ' + stat_key + ' ' + distance_range_key, player=player)
 
     # Close browser
@@ -63,7 +63,7 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
         teams[team].addTable('opponent_shooting', OpponentShooting(TableType.TEAM.name))
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     for stat_key, stat_url in opponent_shooting_stats_types.items():
 
@@ -106,10 +106,6 @@ def browse_page(browser, teams, table_url, stat_url, stat_type, stat_key, season
     browser.get(url)
 
     # Scrape stats if table exist
-    table = browserutils.loadStatTable(browser)
-    if table is not None:
-        if stat_key == "Overall":
-            parse(table, stat_type, 'Opponent Shooting ' + stat_key + ' ' + stat_type, teams=teams)
-        else:
-            parse(table, stat_type, 'Opponent Shooting ' + stat_key, teams=teams)
-
+    table = load_stat_table_page(browser)
+    if table:
+        parse(table.text, stat_key, stat_type, teams=teams)

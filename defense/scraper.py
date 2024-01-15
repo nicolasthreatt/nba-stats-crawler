@@ -34,7 +34,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
         
         # Scrape stats if table exist
         table = load_stat_table_page(browser)
-        if table.text:
+        if table:
             parse(table.text, stat_key.title(), player=player)
 
     # Close browser
@@ -56,7 +56,7 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
     stat        = 'TEAM_NAME'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get Stats and Respective Ranking
     for stat_key, stat_url in defense_dashboard_types.items():
@@ -66,8 +66,8 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
         browser.get(url)
 
         # Scrape stats and get rank if table exist
-        table = browserutils.loadStatTable(browser)
-        if table.text:
+        table = load_stat_table_page(browser)
+        if table:
             parse(table.text, stat_key.title(), teams=teams)
 
     # Close browser

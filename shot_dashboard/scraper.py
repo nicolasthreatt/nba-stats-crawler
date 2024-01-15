@@ -44,7 +44,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
 
             # Scrape stats if table exist
             table = load_stat_table_page(browser)
-            if table.text:
+            if table:
                 parse(table.text, shot_dashboard_key, player=player)
 
     browser.quit()
@@ -72,7 +72,7 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
     stat_type   = 'shots-'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get Stats and Respective Ranking
     for shot_dashboard_key, stat_filters_dict in shot_dashboard_types.items():
@@ -85,9 +85,9 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
             browser.get(url)
 
             # Scrape stats if table exist
-            table = browserutils.loadStatTable(browser)
-            if table is not None:
-                parse(table, key, teams=teams)
+            table = load_stat_table_page(browser)
+            if table:
+                parse(table.text, key, teams=teams)
 
     # Close browser
     browser.quit()

@@ -1,30 +1,44 @@
 import threading
-from box_outs.scraper import teams as box_outs_scraper
-from box_scores.scraper import teams as box_scores_sraper
+from db.teams import insert_teams_stats
 from teams.initializers import initialize
-# from db.teams import insert_teams_stats
+from box_outs.scraper import teams as box_outs_scraper
+from box_scores.scraper import teams as box_scores_scraper
+from clutch.scraper import teams as clutch_scraper
+from defense.scraper import teams as defense_scraper
+from general.scraper import teams as general_scraper
+from hustle.scraper import teams as hustle_scraper
+from opponent_shooting.scraper import teams as opponent_shooting_scraper
+from play_types.scraper import teams as play_types_scraper
+from shooting.scraper import teams as shooting_scraper
+from shot_dashboard.scraper import teams as shot_dashboard_scraper
+from tracking.scraper import teams as tracking_scraper
 
 
 def collect_all_teams(storage: bool=False):
+    # Initalize All 30 Teams
     teams = initialize()
+
+    # Scrape Stats
     scrape_stats(teams)
-    
-    # db.insert_teams_stats(player)
+
+    # Dump Data into Azure Database
+    if storage == "insert":
+        insert_teams_stats(teams)
 
 
 def scrape_stats(teams):
     threads = [
-        # threading.Thread(target=box_outs_scraper,          args=(teams,)),
-        # threading.Thread(target=box_scores_sraper, args=(teams,)),
-        # threading.Thread(target=Clutch.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=DefenseDashboard.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=General.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=Hustle.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=OpponentShooting.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=Playtypes.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=Shooting.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=ShotDashboard.collectTeamStats, args=(teams,)),
-        # threading.Thread(target=Tracking.collectTeamStats, args=(teams,)),
+        threading.Thread(target=box_outs_scraper,          args=(teams,)),
+        threading.Thread(target=box_scores_scraper,        args=(teams,)),
+        threading.Thread(target=clutch_scraper,            args=(teams,)),
+        threading.Thread(target=defense_scraper,           args=(teams,)),
+        threading.Thread(target=general_scraper,           args=(teams,)),
+        threading.Thread(target=hustle_scraper,            args=(teams,)),
+        threading.Thread(target=opponent_shooting_scraper, args=(teams,)),
+        threading.Thread(target=play_types_scraper,        args=(teams,)),
+        threading.Thread(target=shooting_scraper,          args=(teams,)),
+        threading.Thread(target=shot_dashboard_scraper,    args=(teams,)),
+        threading.Thread(target=tracking_scraper,          args=(teams,)),   
     ]
 
     for thread in threads:
@@ -32,32 +46,3 @@ def scrape_stats(teams):
 
     for thread in threads:
         thread.join()
-
-    # dbStorage(teams)
-
-
-# TODO: MOVE TO DIFFERENT FILE
-# def dbStorage(teams):
-#     args = getArgs()
-
-#     if args.insert: or args.update:
-#         cnxn = db.connect()
-#         print('Database connected...')
-
-#         if args.insert:
-#             db.insert_team_info_data(cnxn, teams)
-#             db.insert_rosters(cnxn, teams)
-#             db.insert_box_outs(cnxn, teams)
-#             db.insert_boxscores(cnxn, teams)
-#             db.insert_clutch(cnxn, teams)
-#             db.insert_defensive_dashboard(cnxn, teams)
-#             db.insert_general(cnxn, teams)
-#             db.insert_hustle(cnxn, teams)
-#             db.insert_play_types(cnxn, teams)
-#             db.insert_shot_dashboard(cnxn, teams)
-#             db.insert_opp_shooting(cnxn, teams)
-#             db.insert_shooting(cnxn, teams)
-#             db.insert_tracking(cnxn, teams)
-#         else: # args.update:
-#             #TODO: Update existing data in database
-#             pass

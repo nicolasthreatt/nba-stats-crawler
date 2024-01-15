@@ -1,3 +1,7 @@
+
+from utils.types import TableType
+
+
 class ClutchFourFactors:
     def __init__(self, table_type):
         if table_type == TableType.TEAM.name:

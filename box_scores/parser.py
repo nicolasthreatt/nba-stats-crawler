@@ -1,8 +1,11 @@
 import itertools
+from players.tables.player import Player
+from teams.tables.team import Team
+from utils.browsertools import find_team_name
 from utils.headers import getStatColumnType
 from utils.types import TableType
 
-def parse(table: str, stat_type: str, player = None, team = None):
+def parse(table: str, stat_type: str, player: Player = None, team: Team = None):
     """Parses the boxscore stats table and stores the data in the player/team object
 
     Args:
@@ -12,10 +15,9 @@ def parse(table: str, stat_type: str, player = None, team = None):
         team (Team): The team object to store the stats
     """
 
-    table_type = TableType.PLAYER.name if player is not None else TableType.TEAM.name
+    table_type = TableType.PLAYER.name if player else TableType.TEAM.name
     table_header_row, table_column_offset = getStatColumnType(stat_type, table_type)
 
-    index = 1
     game_number = 1
 
     # Parse statistic table if it exists
@@ -25,23 +27,20 @@ def parse(table: str, stat_type: str, player = None, team = None):
         if row > table_header_row:
 
             # Get Correct Player
-            if ((index % 2) == 1) and (player is not None):
-
+            if player:
                 name = info.title()
                 player.name = name
                 player.boxscoreStats.add_game()
                 StatClass = player.boxscoreStats
 
             # Extract stats
-            if ((index % 2) == 0) or (team is not None):
+            if team:
+                # Reset game_number iterator every team
+                if len(team.boxscoreStats.game) == 0:
+                    game_number = 1
 
-                if team is not None:
-                    # Reset game_number iterator every team
-                    if len(team.boxscoreStats.game) == 0:
-                        game_number = 1
-
-                    team.boxscoreStats.add_game()
-                    StatClass = team.boxscoreStats
+                team.boxscoreStats.add_game()
+                StatClass = team.boxscoreStats
 
                 # Split info from table into a list
                 data = info.split(' ')
@@ -123,5 +122,3 @@ def parse(table: str, stat_type: str, player = None, team = None):
 
                 # Increment Game Count
                 game_number += 1
-
-            index += 1

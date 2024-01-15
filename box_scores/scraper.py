@@ -7,6 +7,7 @@ from box_scores.tables.box_scores import BoxScores
 from players.tables.player import Player
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from utils.browsertools import load_stat_table_page
 
 
 def player(player: Player, season_year: str = '2020-21', season_type: str = 'Regular%20Season'):
@@ -27,13 +28,13 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     browser = webdriver.Chrome()
 
     # Browse to correct stat category
-    url = 'https://nba.com/stats/' + table_type  + stat_type + '/?sort=&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type
+    url = 'https://nba.com/stats/' + table_type  + stat_type + '/?CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type
     browser.get(url)
 
     # Scrape stats if table exist
-    # table = browserutils.loadStatTable(browser) # TODO: Delete or update
-    table = browser.find_element(By.CLASS_NAME, "Crom_table__p1iZz")
-    parse(table.text, stat_type.title(), player=player)
+    table = load_stat_table_page(browser)
+    if table:
+        parse(table.text, stat_type.title(), player=player)
 
     # Close browser
     browser.quit()
@@ -55,7 +56,7 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
     stat_type = 'boxscores'
 
     # Start browser
-    browser = webdriver.Chrome(ChromeDriverManager().install())
+    browser = webdriver.Chrome()
 
     # Get each team's box score stats from every game played
     for team in teams:
@@ -66,9 +67,9 @@ def teams(teams: dict, season_year: str = '2020-21', season_type: str = 'Regular
         browser.get(url)
 
         # Scrape stats if table exist
-        table = browserutils.loadStatTable(browser)
-        if table is not None:
-            parse(table, stat_type.title(), team=teams[team])
+        table = load_stat_table_page(browser)
+        if table:
+            parse(table.text, stat_type.title(), team=teams[team])
 
     # Close browser
     browser.quit()

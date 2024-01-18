@@ -9,7 +9,7 @@ from utils.types import TableType
 def parse(table: str, stat_type: str, player: Player = None, teams: dict = None):
 
     table_type = TableType.PLAYER.name if player else TableType.TEAM.name
-    (table_header_row, table_column_offset) = getStatColumnType('Playtype', table_type)
+    table_header_row, table_column_offset = getStatColumnType('Playtype', table_type)
 
     # Parse statistic table if it exists
     for row, info in enumerate(table.split('\n')):

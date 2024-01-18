@@ -36,7 +36,8 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
     for stat_key, stat_url in stats_urls_tables.items():
         if stat_key != 'Four Factors':
             # Browse to correct stat category
-            url = 'https://nba.com/stats/' + table_type + stat_url + '/#!?CF=PLAYER_NAME*E*' + name + '&sort=' + stat + '&Season=' + season_year + '&SeasonType=' + season_type
+            url = 'https://nba.com/stats/' + table_type  + stat_url + '/?sort=' + stat + '&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type
+
             browser.get(url)
 
             # Scrape stats if table exists

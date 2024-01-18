@@ -42,7 +42,7 @@ def player(player: Player, season_year: str = '2020-21', season_type: str = 'Reg
         for typegroup_key, typegroup_url in type_grouping.items():
 
             # Browse to correct stat category
-            url = 'https://nba.com/stats/' + table_type + playtype_url + '#!?CF=PLAYER_NAME*E*' + name + '&sort=' + stat + '&Season=' + season_year + '&SeasonType=' + season_type + typegroup_url
+            url = 'https://nba.com/stats/' + table_type  + playtype_url + '/?sort=' + stat + '&CF=PLAYER_NAME*E*' + name + '&Season=' + season_year + '&SeasonType=' + season_type + typegroup_url
             browser.get(url)
 
             # Scrape stats if table exist

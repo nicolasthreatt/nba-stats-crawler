@@ -114,7 +114,7 @@ OPPONENT_SHOOTING_OVERALL_TEAM_OFFSET      = 0
 PLAYTYPES_STATS_COLS                       = 5
 
 # Playtyoe Column Offset
-PLAYTYPES_PLAYER_COLS_OFFSET               = 2
+PLAYTYPES_PLAYER_COLS_OFFSET               = 3
 PLAYTYPES_TEAM_COLS_OFFSET                 = 0
 
 
@@ -246,13 +246,13 @@ def getStatColumnType(stat_key, table_type):
         'Hustle':                                  (HUSTLE_STATS_COLS, \
                                                     HUSTLE_PLAYER_OFFSET                       if table_type == TableType.PLAYER.name else HUSTLE_TEAM_OFFSET),
 
-        'Opponent Shooting Overall 5ft Range':     (OPPONENT_SHOOTING_OVERALL_STATS_5FT_COLS, \
+        'Opponent Shooting 5ft Range':             (OPPONENT_SHOOTING_OVERALL_STATS_5FT_COLS, \
                                                     OPPONENT_SHOOTING_PLAYER_OFFSET            if table_type == TableType.PLAYER.name else OPPONENT_SHOOTING_OVERALL_TEAM_OFFSET),
 
-        'Opponent Shooting Overall 8ft Range':     (OPPONENT_SHOOTING_OVERALL_STATS_8FT_COLS, \
+        'Opponent Shooting 8ft Range':             (OPPONENT_SHOOTING_OVERALL_STATS_8FT_COLS, \
                                                     OPPONENT_SHOOTING_PLAYER_OFFSET            if table_type == TableType.PLAYER.name else OPPONENT_SHOOTING_OVERALL_TEAM_OFFSET),
 
-        'Opponent Shooting Overall By Zone':       (OPPONENT_SHOOTING_OVERALL_STATS_ZONE_COLS, \
+        'Opponent Shooting By Zone':               (OPPONENT_SHOOTING_OVERALL_STATS_ZONE_COLS, \
                                                     OPPONENT_SHOOTING_PLAYER_OFFSET            if table_type == TableType.PLAYER.name else OPPONENT_SHOOTING_OVERALL_TEAM_OFFSET),
 
         'Opponent Shooting General':               (OPPONENT_SHOOTING_GENERAL_STATS_COLS, \

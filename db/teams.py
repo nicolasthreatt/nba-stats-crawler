@@ -792,6 +792,7 @@ def insert_tracking(cnxn, teams):
                           data.pull_up_shooting_fg_m,    data.pull_up_shooting_fg_a,  data.pull_up_shooting_fg_pct,
                           data.pull_up_shooting_fg3_m,   data.pull_up_shooting_fg3_a, data.pull_up_shooting_fg3_pct,
                           data.pull_up_shooting_efg_pct
+                )
                 
 
             elif key == 'Passing':
@@ -841,6 +842,7 @@ def insert_tracking(cnxn, teams):
                           data.contested_rebs,        data.contested_rebs_pct,
                           data.reb_chances,           data.reb_chances_pct,
                           data.deferred_reb_chances,  data.adj_reb_chance_pct
+                )
                 
 
             elif key == 'Offensive Rebounding':

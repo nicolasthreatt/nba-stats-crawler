@@ -102,7 +102,7 @@ def insert_box_outs(cnxn, player):
     values = (
               player.name,
               data.boxouts,
-              data.off_boxouts,              data.def_boxouts
+              data.off_boxouts,              data.def_boxouts,
               data.team_reb_on_boxouts,      data.player_reb_on_boxouts,
               data.pct_boxouts_off,          data.pct_boxouts_def,
               data.pct_team_reb_when_boxout, data.pct_player_reb_when_boxout
@@ -129,7 +129,7 @@ def insert_boxscores(cnxn, player):
 
     for game in player.boxscoreStats.game:
         values = (
-                  player.name  game.opponent, game.game_date,
+                  player.name, game.opponent, game.game_date,
                   game.result, game.mins,     game.pts,
                   game.fg_m,   game.fg_a,     game.fg_pct,
                   game.fg3_m,  game.fg3_a,    game.fg3_pct,

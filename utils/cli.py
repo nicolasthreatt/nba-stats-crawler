@@ -15,7 +15,7 @@ def parse_arguments():
     parser.add_argument('--teams', dest='teams', required=False, action='store_true',
                         help='All 30 Teams')
     
-    parser.add_argument('--rosters', dest='rosters', required=False, action='store_true',
+    parser.add_argument('--rosters', dest='rosters', required=False, action='store_true', default=False,
                         help='Collect Each Team\'s Rosters')
 
     parser.add_argument('--storage', dest='storage', type=str, required=False, default=str(),

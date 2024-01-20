@@ -10,8 +10,7 @@ def main():
     elif args.players: # Collect all players from nba.com/players
         collect_all_players(args.storage)
     elif args.teams:  # Collect all 30 teams
-        print('Scraping stats....')
-        collect_all_teams(args.storage)
+        collect_all_teams(args.rosters, args.storage)
     else:
         exit('No player(s) or team specified')
 

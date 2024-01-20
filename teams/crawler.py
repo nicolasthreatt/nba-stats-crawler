@@ -9,14 +9,21 @@ from general.scraper import teams as general_scraper
 from hustle.scraper import teams as hustle_scraper
 from opponent_shooting.scraper import teams as opponent_shooting_scraper
 from play_types.scraper import teams as play_types_scraper
+from rosters.helpers import create_roster
 from shooting.scraper import teams as shooting_scraper
 from shot_dashboard.scraper import teams as shot_dashboard_scraper
 from tracking.scraper import teams as tracking_scraper
 
 
-def collect_all_teams(storage: bool=False):
+def collect_all_teams(rosters: bool=False, storage: bool=False):
+    print('Scraping stats for all 30 NBA teams....')
+
     # Initalize All 30 Teams
     teams = initialize()
+
+    # Create Rosters
+    if rosters:
+        create_roster(teams)
 
     # Scrape Stats
     scrape_stats(teams)
@@ -27,6 +34,7 @@ def collect_all_teams(storage: bool=False):
 
 
 def scrape_stats(teams):
+    # TODO: COLLECT ROSTERS HERE
     threads = [
         threading.Thread(target=box_outs_scraper,          args=(teams,)),
         threading.Thread(target=box_scores_scraper,        args=(teams,)),
@@ -38,7 +46,7 @@ def scrape_stats(teams):
         threading.Thread(target=play_types_scraper,        args=(teams,)),
         threading.Thread(target=shooting_scraper,          args=(teams,)),
         threading.Thread(target=shot_dashboard_scraper,    args=(teams,)),
-        threading.Thread(target=tracking_scraper,          args=(teams,)),   
+        threading.Thread(target=tracking_scraper,          args=(teams,)),
     ]
 
     for thread in threads:

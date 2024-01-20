@@ -13,14 +13,12 @@ def parse(table: str, teams: dict):
 
     # Parse statistic table
     for row, info in enumerate(table.split('\n')):
-        # print(info)
-        # print()
 
         # Throwaway junk lines (column names)
         if row > 0:
 
             # Grab Team City
-            if info.strip() in CITIES:
+            if info.title().strip() in CITIES:
                 city = info.strip()
                 continue
 

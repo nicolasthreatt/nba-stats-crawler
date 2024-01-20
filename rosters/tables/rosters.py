@@ -1,14 +1,3 @@
-# Team class to hold each team's roster
-class RosterTeam:
-    def __init__(self, team, player = None):
-        self.team = team
-        self.players = []
-
-    def getTeam(self):
-        return (self.team)
-
-
-# Player info class
 class RosterPlayer:
     def __init__(self):
         self.name       = str() # Name

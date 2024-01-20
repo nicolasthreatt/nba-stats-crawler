@@ -1,5 +1,6 @@
 class Team:
     def __init__(self):
+        self.players         = list()
         self.overall         = {'W': int(), 'L': int()} # Overall Record
         self.win_pct         = float()                  # Winning Percentage
         self.games_back      = float()                  # Games Back

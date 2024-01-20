@@ -1,6 +1,6 @@
 import threading
 from db.players import insert_player_data
-from players import initializers, fetcher
+from players import fetcher
 from box_outs.scraper import player as box_outs_scraper
 from box_scores.scraper import player as box_scores_scraper
 from clutch.scraper import player as clutch_scraper
@@ -15,18 +15,18 @@ from tracking.scraper import player as tracking_scraper
 
 
 def collect_single_player(name: str, storage: bool=False):
-    fname, lname = name
+    print('Scraping stats for {}....'.format(name))
 
-    player = initializers.player(fname, lname)
+    player = fetcher.retrieve_player(name)
     scrape_stats(player)
     
     if storage == "insert":
         insert_player_data(player)
 
 
-def collect_all_players(insert = False, update = False):
-    players_names = fetcher.get_all_players()
-    players      = initializers.players(players_names)
+def collect_all_players(storage: bool=False):
+    print('Scraping stats for all players found at https://www.nba.com/stats/players/bio/....')
+    players = fetcher.retrieve_all_players()
 
     for player in players:
         scrape_stats(player)
@@ -37,17 +37,17 @@ def collect_all_players(insert = False, update = False):
 
 def scrape_stats(player):
     threads = [
-        # threading.Thread(target=box_outs_scraper,          args=(player,)),
-        # threading.Thread(target=box_scores_scraper,        args=(player,)), # TODO: FIX ERROR (parser)
-        # threading.Thread(target=clutch_scraper,            args=(player,)),
-        # threading.Thread(target=defense_scraper,           args=(player,)),
-        # threading.Thread(target=general_scraper,           args=(player,)), # TODO: FIX ERROR (parser)
-        # threading.Thread(target=hustle_scraper,            args=(player,)),
-        # threading.Thread(target=opponent_shooting_scraper, args=(player,)),
-        # threading.Thread(target=play_types_scraper,        args=(player,)),  # TODO: FIX ERROR (parser)
-        # threading.Thread(target=shooting_scraper,          args=(player,)),
-        # threading.Thread(target=shot_dashboard_scraper,    args=(player,)),
-        # threading.Thread(target=tracking_scraper,          args=(player,)),
+        threading.Thread(target=box_outs_scraper,          args=(player,)),
+        threading.Thread(target=box_scores_scraper,        args=(player,)),
+        threading.Thread(target=clutch_scraper,            args=(player,)),
+        threading.Thread(target=defense_scraper,           args=(player,)),
+        threading.Thread(target=general_scraper,           args=(player,)),
+        threading.Thread(target=hustle_scraper,            args=(player,)),
+        threading.Thread(target=opponent_shooting_scraper, args=(player,)),
+        threading.Thread(target=play_types_scraper,        args=(player,)),
+        threading.Thread(target=shooting_scraper,          args=(player,)),
+        threading.Thread(target=shot_dashboard_scraper,    args=(player,)),
+        threading.Thread(target=tracking_scraper,          args=(player,)),
     ]
 
     for thread in threads:

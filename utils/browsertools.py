@@ -1,14 +1,29 @@
 import re
-from itertools import cycle
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-def load_stat_table_page(browser, table_html_class="Crom_table__p1iZz", timeout=30):
+def load_stat_table_page(browser: WebDriver, table_html_class: str="Crom_table__p1iZz", timeout: int=30) -> WebElement:
+    """
+    Load the statistics table page in a web browser.
+
+    Args:
+        browser (WebDriver): The Selenium WebDriver instance.
+        table_html_class (str, optional): The HTML class name of the statistics table. Defaults to "Crom_table__p1iZz".
+        timeout (int, optional): Maximum time to wait for the page to load, in seconds. Defaults to 30.
+
+    Returns:
+        WebElement: The statistics table element once it is present in the DOM.
+
+    Raises:
+        TimeoutException: If the page loading times out.
+    """
     try:
         ignored_exceptions = (NoSuchElementException, StaleElementReferenceException,)
         

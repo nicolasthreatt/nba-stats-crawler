@@ -1,14 +1,6 @@
-"""
-TYPES
-"""
-from enum import IntEnum, Enum, unique
+from enum import IntEnum, unique
 
 @unique
-class TableType(Enum):
+class TableType(IntEnum):
     PLAYER = 1
     TEAM   = 2
-
-@unique
-class StorageType(IntEnum):
-    INSERT = 1
-    UPDATE = 2

@@ -34,7 +34,6 @@ def collect_all_teams(rosters: bool=False, storage: bool=False):
 
 
 def scrape_stats(teams):
-    # TODO: COLLECT ROSTERS HERE
     threads = [
         threading.Thread(target=box_outs_scraper,          args=(teams,)),
         threading.Thread(target=box_scores_scraper,        args=(teams,)),
